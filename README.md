@@ -1,8 +1,6 @@
 Cliente
 =====================
 
-A starting project for Ionic that optionally supports using custom SCSS.
-
 ```bash
 $ npm install -g ionic
 ```
