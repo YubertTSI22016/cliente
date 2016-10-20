@@ -1,7 +1,11 @@
 angular.module('app')
 
-  .controller('UsuarioCtrl', function ($scope, $ionicAuth, ProveedorService, $ionicLoading, $state, $ionicSideMenuDelegate, uiGmapGoogleMapApi, uiGmapIsReady, $ionicPopup) {
+  .controller('UsuarioCtrl', function ($scope, $ionicAuth, $ionicUser, ProveedorService, $ionicLoading, $state, $ionicSideMenuDelegate, uiGmapGoogleMapApi, uiGmapIsReady, $ionicPopup, PusherService) {
     $scope.markers = [];
+
+    console.log('usuario')
+
+    PusherService.unbindAll();
 
     if (!$ionicAuth.isAuthenticated()) {
       $state.go('welcome');
@@ -58,55 +62,17 @@ angular.module('app')
       }
     };
 
-    function addYourLocationButton(){
-      var map = $scope.map;
-      var controlDiv = document.createElement('div');
+    uiGmapIsReady.promise(1).then(function(instances) {
+      var map = instances[0].map;
+      $scope.map = map;
 
-      var firstChild = document.createElement('button');
-      firstChild.style.backgroundColor = '#fff';
-      firstChild.style.border = 'none';
-      firstChild.style.outline = 'none';
-      firstChild.style.width = '28px';
-      firstChild.style.height = '28px';
-      firstChild.style.borderRadius = '2px';
-      firstChild.style.boxShadow = '0 1px 4px rgba(0,0,0,0.3)';
-      firstChild.style.cursor = 'pointer';
-      firstChild.style.marginRight = '10px';
-      firstChild.style.padding = '0px';
-      firstChild.title = 'Mi ubicacion';
-      controlDiv.appendChild(firstChild);
-
-      var secondChild = document.createElement('div');
-      secondChild.style.margin = '5px';
-      secondChild.style.width = '18px';
-      secondChild.style.height = '18px';
-      secondChild.style.backgroundImage = 'url(https://maps.gstatic.com/tactile/mylocation/mylocation-sprite-1x.png)';
-      secondChild.style.backgroundSize = '180px 18px';
-      secondChild.style.backgroundPosition = '0px 0px';
-      secondChild.style.backgroundRepeat = 'no-repeat';
-      firstChild.appendChild(secondChild);
-
-      firstChild.addEventListener('click', function() {
-          $scope.centerOnMe();
+      navigator.geolocation.getCurrentPosition(function (pos) {
+        setCurrentLocation(pos);
+      }, function (error) {
+        alert('getCurrentPosition Unable to get location: ' + error);
       });
 
-      controlDiv.index = 1;
-      map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(controlDiv);
-    };
-
-    uiGmapIsReady.promise(1)
-      .then(function(instances) {
-        $scope.map = instances[0].map;
-
-        navigator.geolocation.getCurrentPosition(function (pos) {
-          setCurrentLocation(pos);
-        }, function (error) {
-          alert('getCurrentPosition Unable to get location: ' + error);
-        });
-
-        addYourLocationButton();
-
-        $scope.cargarProveedores();
+      $scope.cargarProveedores();
     });
 
     $scope.cargarProveedores = function(){
@@ -152,24 +118,30 @@ angular.module('app')
     };
 
     $scope.solicitar = function () {
-      if (!$scope.map) {
+      var marker = _.find($scope.markers, ['id', 'usuario']);
+      if (!marker) {
         return;
       }
 
       var alertPopup = $ionicPopup.alert({
-        title: 'Solicitud enviada',
-        template: 'Aguarde un momento, esperamos la respuesta de algun proveedor libre.',
-        okText: 'Cancelar',
-        okType: 'button-assertive'
+        title     : 'Solicitud enviada',
+        template  : 'Aguarde un momento, esperamos la respuesta de algun proveedor libre.',
+        okText    : 'Cancelar',
+        okType    : 'button-assertive'
       });
+
+      var data = { usuario : $ionicUser, coords : marker['coords']};
 
       alertPopup.then(function(res) {
-       console.log('Thank you for not eating my delicious ice cream cone');
+        console.log('cancelar servicio');
       });
-    };
 
-    $scope.toggleLeft = function() {
-      $ionicSideMenuDelegate.toggleLeft();
+      PusherService.usuarioChannel.bind('solicitud-aceptada',
+        function(data) {
+          alertPopup.close();
+          $state.go('locations.calificar', { id : 1 });
+        }
+      );
     };
 
   });

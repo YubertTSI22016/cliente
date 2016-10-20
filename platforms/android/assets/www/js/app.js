@@ -2,8 +2,10 @@ angular.module('app', ['ionic', 'ionic.cloud', 'uiGmapgoogle-maps', 'pusher-angu
 
 .constant('CONFIG', {
   'URL'             : 'http://localhost',
-  'NOMBRE_EMPRESA'  : 'YUBER',
+  'TENANT'          : 'tenant',
   'FACEBOOK'        : true,
+  'PUSHER_KEY'      : 'c2f52caa39102181e99f',
+  'NOMBRE_EMPRESA'  : 'YUBER',
 })
 
 .run(function($ionicPlatform, $rootScope, CONFIG) {
@@ -73,6 +75,25 @@ angular.module('app', ['ionic', 'ionic.cloud', 'uiGmapgoogle-maps', 'pusher-angu
         'view-container' : {
           templateUrl : 'templates/locations/_usuario.html',
           controller  : 'UsuarioCtrl'
+        }
+      }
+    })
+    .state('locations.servicio', {
+      url   : '/servicio/:id',
+      cache : false,
+      views : {
+        'view-container' : {
+          templateUrl : 'templates/locations/_servicio.html',
+          controller  : 'ServicioCtrl'
+        }
+      }
+    }).state('locations.calificar', {
+      url   : '/calificar/:id',
+      cache : false,
+      views : {
+        'view-container' : {
+          templateUrl : 'templates/locations/_calificar.html',
+          controller  : 'CalificarCtrl'
         }
       }
     });

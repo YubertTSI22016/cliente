@@ -1,14 +1,6 @@
 angular.module('app')
 
   .controller('PerfilCtrl', function ($scope, $state, $ionicAuth, $ionicUser) {
-    if ($state.is('locations.usuario')) {
-      $scope.modo = 'usuario';
-    } else if ($state.is('locations.proveedor')) {
-      $scope.modo = 'proveedor';
-    }
-
-    console.log($ionicUser.details.name || $ionicUser.details.email);
-
     if ($ionicUser.social.facebook) {
       $scope.usuario = {
         name  : $ionicUser.social.facebook.data.full_name,
@@ -27,12 +19,10 @@ angular.module('app')
     };
 
     $scope.goToUsuario = function(){
-      $scope.modo = 'usuario';
       $state.go('locations.usuario');
     };
 
     $scope.goToProveedor = function(){
-      $scope.modo = 'proveedor';
       $state.go('locations.proveedor');
     };
 

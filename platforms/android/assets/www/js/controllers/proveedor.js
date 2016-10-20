@@ -1,7 +1,11 @@
 angular.module('app')
 
-  .controller('ProveedorCtrl', function ($scope, $ionicAuth, ProveedorService, $ionicLoading, $state, $ionicSideMenuDelegate, uiGmapGoogleMapApi, uiGmapIsReady, $ionicPopup) {
+  .controller('ProveedorCtrl', function ($scope, $ionicAuth, ProveedorService, $ionicLoading, $state, $ionicSideMenuDelegate, uiGmapGoogleMapApi, uiGmapIsReady, $ionicPopup, PusherService) {
     $scope.markers = [];
+
+    console.log('proveedor')
+
+    PusherService.unbindAll();
 
     if (!$ionicAuth.isAuthenticated()) {
       $state.go('welcome');
@@ -58,53 +62,38 @@ angular.module('app')
       }
     };
 
-    function addYourLocationButton(){
-      var map = $scope.map;
-      var controlDiv = document.createElement('div');
-
-      var firstChild = document.createElement('button');
-      firstChild.style.backgroundColor = '#fff';
-      firstChild.style.border = 'none';
-      firstChild.style.outline = 'none';
-      firstChild.style.width = '28px';
-      firstChild.style.height = '28px';
-      firstChild.style.borderRadius = '2px';
-      firstChild.style.boxShadow = '0 1px 4px rgba(0,0,0,0.3)';
-      firstChild.style.cursor = 'pointer';
-      firstChild.style.marginRight = '10px';
-      firstChild.style.padding = '0px';
-      firstChild.title = 'Mi ubicacion';
-      controlDiv.appendChild(firstChild);
-
-      var secondChild = document.createElement('div');
-      secondChild.style.margin = '5px';
-      secondChild.style.width = '18px';
-      secondChild.style.height = '18px';
-      secondChild.style.backgroundImage = 'url(https://maps.gstatic.com/tactile/mylocation/mylocation-sprite-1x.png)';
-      secondChild.style.backgroundSize = '180px 18px';
-      secondChild.style.backgroundPosition = '0px 0px';
-      secondChild.style.backgroundRepeat = 'no-repeat';
-      firstChild.appendChild(secondChild);
-
-      firstChild.addEventListener('click', function() {
-          $scope.centerOnMe();
+    var mostrarServicio = function(){
+      $ionicPopup.show({
+        template: 'Si desea tomar el servicio acepte el pedido',
+        title: 'Usuario solicitando un servicio',
+        buttons: [
+          {
+            text  : 'Cancelar',
+            type  : 'button-light',
+            onTap : function(e) {
+              console.log('cancelar')
+            }
+          },
+          {
+            text  : '<b>Aceptar</b>',
+            type  : 'button-energized',
+            onTap : function(e) {
+              $state.go('locations.servicio', { id : 1 });
+            }
+          }
+        ]
       });
+    }
 
-      controlDiv.index = 1;
-      map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(controlDiv);
-    };
+    uiGmapIsReady.promise(2).then(function(instances) {
+      var map = instances[1].map;
+      $scope.map = map;
 
-    uiGmapIsReady.promise(2)
-      .then(function(instances) {
-        $scope.map = instances[1].map;
-
-        navigator.geolocation.getCurrentPosition(function (pos) {
-          setCurrentLocation(pos);
-        }, function (error) {
-          alert('getCurrentPosition Unable to get location: ' + error);
-        });
-
-        addYourLocationButton();
+      navigator.geolocation.getCurrentPosition(function (pos) {
+        setCurrentLocation(pos);
+      }, function (error) {
+        alert('getCurrentPosition Unable to get location: ' + error);
+      });
     });
 
     $scope.centerOnMe = function () {
@@ -124,38 +113,20 @@ angular.module('app')
       });
     };
 
-    $scope.toggleLeft = function() {
-      $ionicSideMenuDelegate.toggleLeft();
-    };
-
     $scope.comenzar = function(){
       $scope.activo = true;
-
-      // An elaborate, custom popup
-      var myPopup = $ionicPopup.show({
-        template: 'Si desea tomar el servicio acepte el pedido',
-        title: 'Usuario solicitando un servicio',
-        buttons: [
-          {
-            text: 'Cancelar',
-            type: 'button-light',
-            onTap: function(e) {
-              console.log('cancelar')
-            }
-          },
-          {
-            text: '<b>Aceptar</b>',
-            type: 'button-energized',
-            onTap: function(e) {
-              console.log('aceptar')
-            }
-          }
-        ]
-      });
     }
 
     $scope.finalizar = function(){
       $scope.activo = false;
     }
+
+    PusherService.proveedoresChannel.bind('solicitud-recibida',
+      function(data) {
+        if ($scope.activo) {
+          mostrarServicio();
+        }
+      }
+    );
 
   });
