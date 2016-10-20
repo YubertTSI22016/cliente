@@ -13,11 +13,6 @@
         "cordova-plugin-device": {
             "PACKAGE_NAME": "com.yuber.app"
         },
-        "cordova-plugin-facebook4": {
-            "APP_ID": "1806093886342495",
-            "APP_NAME": "yuber",
-            "PACKAGE_NAME": "com.yuber.app"
-        },
         "cordova-plugin-geolocation": {
             "PACKAGE_NAME": "com.yuber.app"
         },

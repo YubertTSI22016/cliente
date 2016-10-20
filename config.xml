@@ -69,9 +69,5 @@
     <splash density="port-xxxhdpi" src="resources/android/splash/drawable-port-xxxhdpi-screen.png"/>
   </platform>
   <plugin name="cordova-plugin-inappbrowser" spec="~1.5.0"/>
-  <plugin name="cordova-plugin-facebook4" spec="https://github.com/jeduan/cordova-plugin-facebook4">
-    <variable name="APP_ID" value="1806093886342495"/>
-    <variable name="APP_NAME" value="yuber"/>
-  </plugin>
   <engine name="ios" spec="~4.2.1"/>
 </widget>

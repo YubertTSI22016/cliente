@@ -24,51 +24,14 @@
     <string>0.0.1</string>
     <key>CFBundleSignature</key>
     <string>????</string>
-    <key>CFBundleURLTypes</key>
-    <array>
-      <dict>
-        <key>CFBundleURLSchemes</key>
-        <array>
-          <string>fb1806093886342495</string>
-        </array>
-      </dict>
-    </array>
     <key>CFBundleVersion</key>
     <string>0.0.1</string>
-    <key>FacebookAppID</key>
-    <string>1806093886342495</string>
-    <key>FacebookDisplayName</key>
-    <string>yuber</string>
     <key>LSApplicationQueriesSchemes</key>
-    <array>
-      <string>fbapi</string>
-      <string>fb-messenger-api</string>
-      <string>fbauth2</string>
-      <string>fbshareextension</string>
-    </array>
+    <array/>
     <key>LSRequiresIPhoneOS</key>
     <true/>
     <key>NSAppTransportSecurity</key>
     <dict>
-      <key>NSExceptionDomains</key>
-      <dict>
-        <key>m.facebook.com</key>
-        <dict/>
-        <key>graph.facebook.com</key>
-        <dict/>
-        <key>api.facebook.com</key>
-        <dict/>
-        <key>fbcdn.net</key>
-        <dict>
-          <key>NSIncludesSubdomains</key>
-          <true/>
-        </dict>
-        <key>akamaihd.net</key>
-        <dict>
-          <key>NSIncludesSubdomains</key>
-          <true/>
-        </dict>
-      </dict>
       <key>NSAllowsArbitraryLoads</key>
       <true/>
     </dict>
