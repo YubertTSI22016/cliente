@@ -1,0 +1,73 @@
+.project-detail{
+
+  .bar{
+    background: none;
+  }
+
+  .header-slideshow-wrapper{
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+    background: $color-detroit;
+    z-index: 100;
+
+    .header-overlay{
+      position: absolute;
+      bottom: 24px;
+      left: 20px;
+      z-index: 105;
+      color: white;
+      width: calc(100% - 55px);
+
+      h3, h5{
+        padding: 1px 3px 2px 3px;
+        margin: 0 0 1px 0;
+        display: inline-block;
+        max-width: calc(100% - 10px);
+        color: white;
+        background: rgba(0,0,0,0.5);
+      }
+
+      h3{
+        color: white;
+        line-height: 26px;
+      }
+      h5{
+        color: $color-pittsburgh;
+      }
+    }
+    
+    .header-slideshow-shadow{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 180px;
+      background: -webkit-linear-gradient(top, rgba(0,0,0,0.7) 0%,rgba(0,0,0,0) 100%);
+      z-index: 102;
+    }
+
+    .header-slideshow-image{
+      height: 220px;
+      -webkit-background-size: cover;
+      background-size: cover;
+      background-repeat: no-repeat;
+      z-index: 101;
+
+      img{
+        width: 100%;
+      }
+    }
+
+    .button-download-report{
+      position: absolute;
+      top: 174px;
+      right: 0px;
+      z-index: 104;
+      color: white;
+      text-shadow: 1px 1px 1px black;
+    }
+  }
+  
+
+}

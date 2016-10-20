@@ -1,0 +1,22 @@
+<ion-view view-title="{{CONFIG.NOMBRE_EMPRESA}}" hide-back-button="true">
+
+  <ion-nav-buttons side="secondary">
+    <button class="button button-clear icon-right icon button-icon ion-navigate" ng-click="centerOnMe()"></button>
+  </ion-nav-buttons>
+
+  <ion-content class="has-header" scroll="false">
+
+    <div class="map-wrapper">
+      <ui-gmap-google-map center="mapProveedorConfig.center" zoom="mapProveedorConfig.zoom" options="mapProveedorConfig.options">
+        <ui-gmap-marker ng-repeat="m in markers" icon="m.icon" coords="m.coords" options="m.options" events="m.events" idKey="m.id"></ui-gmap-marker>
+      </ui-gmap-google-map>
+    </div>
+
+    <div class="map-scroller">
+      <button ng-if="!activo" class="button button-full button-balanced" ng-click="comenzar()" style="margin:0;">Comenzar jornada laboral</button>
+      <button ng-if="activo" class="button button-full button-assertive" ng-click="finalizar()" style="margin:0;">Finalizar jornada laboral</button>
+    </div>
+
+  </ion-content>
+
+</ion-view>

@@ -1,0 +1,107 @@
+/*
+To customize the look and feel of Ionic, you can override the variables
+in ionic's _variables.scss file.
+
+For example, you might change some of the default colors:
+
+$light:                           #fff !default;
+$stable:                          #f8f8f8 !default;
+$positive:                        #387ef5 !default;
+$calm:                            #11c1f3 !default;
+$balanced:                        #33cd5f !default;
+$energized:                       #ffc900 !default;
+$assertive:                       #ef473a !default;
+$royal:                           #886aea !default;
+$dark:                            #444 !default;
+*/
+
+// The path for our ionicons font files, relative to the built CSS in www/css
+$ionicons-font-path: "../lib/ionic/fonts" !default;
+
+@import "modules/colors";
+
+$dark       : $color-anchorage !default;
+$stable     : $color-chicago !default;
+$energized  : $color-miami !default;
+$assertive  : $color-tulsa !default;
+$positive   : $color-chicago !default;
+
+@mixin calc($property, $expression) {
+  #{$property}: -webkit-calc(#{$expression});
+  #{$property}: calc(#{$expression});
+}
+
+@import "../www/lib/ionic/scss/ionic";
+
+@import "modules/pages/map";
+@import "modules/pages/project.detail";
+
+
+body, html{
+  background: $color-pittsburgh;
+  color: $color-detroit;
+  font-family: "proxima-nova",sans-serif;
+}
+
+.platform-browser{
+
+  .view-container{
+    top: 0px!important ;
+    @include calc(height, "100% - 0px");
+  }
+
+  //android
+  .tabs-top > .tabs,
+  .tabs.tabs-top{
+    top: 55px;
+    background: $dark;
+
+    *{
+      color:white!important;
+    }
+  }
+
+  .bar{
+
+    &.bar-special{
+      height:65px;
+
+      .title{
+        margin-top:19px;
+
+        + .buttons{
+          top: 19px;
+        }
+      }
+
+      .back-button{
+        margin-top: 15px;
+      }
+    }
+  }
+}
+
+ion-content{
+  .button{
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: white;
+    font-weight: bold;
+  }
+}
+
+
+
+.bar.bar-dark .title,
+.bar.bar-special .title{
+  color: white;
+  text-transform: uppercase!important;
+  font-size: 12px;
+  letter-spacing: 2px;
+}
+
+.has-header {
+  top: 65px;
+}
+

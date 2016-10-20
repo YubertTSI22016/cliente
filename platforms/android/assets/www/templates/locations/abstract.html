@@ -1,0 +1,51 @@
+<ion-view view-title="{{CONFIG.NOMBRE_EMPRESA}}">
+
+  <ion-side-menus enable-menu-with-back-views="true">
+
+    <ion-side-menu side="left">
+
+      <ion-header-bar class="bar bar-dark bar-special">
+        <h1 class="title">Menu</h1>
+      </ion-header-bar>
+
+      <ion-content ng-controller="PerfilCtrl">
+        <ion-list>
+          <ion-item class="item item-thumbnail-left-perfil">
+          <img ng-src="{{usuario.image}}">
+          <h2>{{usuario.name}}</h2>
+        </ion-item>
+        <ion-item ng-if="modo == 'usuario'" ng-click="goToProveedor()" menu-close>
+            Entrar como proveedor
+          </ion-item>
+        </ion-list>
+        <ion-item ng-if="modo == 'proveedor'" ng-click="goToUsuario()" menu-close>
+            Entrar como usuario
+          </ion-item>
+        </ion-list>
+        <ion-item menu-close ng-click="logout()">
+            Cerrar Sesion
+          </ion-item>
+        </ion-list>
+      </ion-content>
+
+    </ion-side-menu>
+
+    <ion-side-menu-content drag-content="false">
+
+      <ion-nav-bar class="bar bar-dark bar-special">
+
+        <ion-nav-back-button class="button-energized"></ion-nav-back-button>
+
+        <ion-nav-buttons side="left">
+          <button class="button button-icon button-clear ion-navicon" menu-toggle="left"></button>
+        </ion-nav-buttons>
+
+      </ion-nav-bar>
+
+      <ion-nav-view name="view-container"></ion-nav-view>
+
+    </ion-side-menu-content>
+
+  </ion-side-menus>
+
+</ion-view>

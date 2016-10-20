@@ -1,0 +1,45 @@
+<ion-view view-title="{{proveedor.titulo}}" class="project-detail">
+
+  <ion-nav-bar class="bar-special bar-clear">
+    <ion-nav-back-button class="button back-button buttons button-light__ button-clear header-item">Volver</ion-nav-back-button>
+
+    <ion-nav-buttons side="secondary">
+      <button class="button button-clear icon-right button-icon icon ion-ios-camera-outline button-energized" ng-click="addMedia()"></button>
+    </ion-nav-buttons>
+
+  </ion-nav-bar>
+
+
+
+  <ion-content class="has-header" style="top:0;">
+
+    <div class="header-slideshow-wrapper">
+
+      <hgroup class="header-overlay">
+        <h5>own by {{proveedor.createdBy}}</h5>
+      </hgroup>
+
+      <button class="button-download-report button button-clear icon-right button-icon icon ion-ios-cloud-download-outline" ng-click="downloadReport()"></button>
+
+      <div class="header-slideshow-shadow"></div>
+      <div class="header-slideshow-image" style="background-image:url({{proveedor.image}});"></div>
+
+    </div>
+
+
+    <ion-scroll class="padding" style="height: 448px">
+      <h1>{{proveedor.titulo}}</h1>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores beatae, cupiditate deserunt dolore dolorem eius eos harum in molestias mollitia nihil nostrum odio praesentium provident quaerat repellat sint veritatis. Laudantium.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores beatae, cupiditate deserunt dolore dolorem eius eos harum in molestias mollitia nihil nostrum odio praesentium provident quaerat repellat sint veritatis. Laudantium.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores beatae, cupiditate deserunt dolore dolorem eius eos harum in molestias mollitia nihil nostrum odio praesentium provident quaerat repellat sint veritatis. Laudantium.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores beatae, cupiditate deserunt dolore dolorem eius eos harum in molestias mollitia nihil nostrum odio praesentium provident quaerat repellat sint veritatis. Laudantium.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores beatae, cupiditate deserunt dolore dolorem eius eos harum in molestias mollitia nihil nostrum odio praesentium provident quaerat repellat sint veritatis. Laudantium.</p>
+      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores beatae, cupiditate deserunt dolore dolorem eius eos harum in molestias mollitia nihil nostrum odio praesentium provident quaerat repellat sint veritatis. Laudantium.</p>
+    </ion-scroll>
+
+
+
+
+  </ion-content>
+
+</ion-view>

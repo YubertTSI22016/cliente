@@ -1,0 +1,27 @@
+<ion-view view-title="Welcome">
+
+  <ion-view hide-nav-bar="true">
+
+  <ion-content style="height:100%;">
+
+    <div class="text-center" style="position:relative;;height:82%;">
+      <img src="img/login-bg.jpg" alt="" style="width:100%;margin-bottom:-6px;"/>
+      <h5 style="letter-spacing:2px;margin-top:15px;margin-bottom: 12px;">Bienvenido a <span style="color:#edad49;">{{CONFIG.NOMBRE_EMPRESA}}</span></h5>
+      <h5 style="border-bottom:3px solid black;width: 20px;margin:0 auto 15px auto;"></h5>
+      <p class="padding" style="color: #888;">{{CONFIG.NOMBRE_EMPRESA}} es una plataforma para buscar servicios.</p>
+
+      <div ng-if="CONFIG.FACEBOOK" class="button-group padding" style="bottom:-20px;position:absolute;width:100%;">
+        <button ng-click="doFacebookLogin()" class="button button-positive button-block" style="margin: 0;">Ingresar con Facebook</button>
+        o
+      </div>
+
+      <div class="button-group padding" style="bottom:-115px;position:absolute;width:100%;">
+        <button ng-click="login()" class="button button-energized button-block" style="margin: 0;">Iniciar sesion</button>
+        <button ng-click="registro()" class="button button-light button-block" style="margin: 0;">Registrarse</button>
+      </div>
+
+    </div>
+
+  </ion-content>
+
+</ion-view>

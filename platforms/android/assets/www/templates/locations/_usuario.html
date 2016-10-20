@@ -1,0 +1,17 @@
+<ion-view view-title="{{CONFIG.NOMBRE_EMPRESA}}" hide-back-button="true">
+
+  <ion-content class="has-header" scroll="false">
+
+    <div class="map-wrapper">
+      <ui-gmap-google-map center="mapUsuarioConfig.center" zoom="mapUsuarioConfig.zoom" options="mapUsuarioConfig.options">
+        <ui-gmap-marker ng-repeat="m in markers" icon="m.icon" coords="m.coords" options="m.options" events="m.events" idKey="m.id"></ui-gmap-marker>
+      </ui-gmap-google-map>
+    </div>
+
+    <div class="map-scroller">
+      <button class="button button-full button-energized" ng-click="solicitar()" style="margin:0;">Solicitar servicio</button>
+    </div>
+
+  </ion-content>
+
+</ion-view>

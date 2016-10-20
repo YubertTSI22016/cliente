@@ -1,0 +1,13 @@
+{
+  "name": "yuber",
+  "app_id": "324566f8",
+  "gulpStartupTasks": [
+    "sass",
+    "watch"
+  ],
+  "watchPatterns": [
+    "scss/**/*",
+    "www/**/*",
+    "!www/lib/**/*"
+  ]
+}

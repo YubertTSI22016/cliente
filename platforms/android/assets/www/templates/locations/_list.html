@@ -1,0 +1,36 @@
+<ion-view view-title="All Locations" class="locations-list">
+
+  <ion-content class="has-header" scroll="false">
+
+    <div class="item item-input-inset item-dark">
+      <label class="item-input-wrapper">
+        <input type="text" placeholder="Search as you type" ng-model="filterModel">
+      </label>
+      <button class="button button-small button-clear button-clear" ng-click="filterModel='';">clear</button>
+    </div>
+
+    <ion-scroll style="height:100%;">
+
+      <ion-list>
+
+        <ion-item class="item item-thumbnail-left"
+          ng-repeat="proveedor in proveedores | filter:filterModel"
+          ui-sref="locations.detail({ id : proveedor.id })"
+          >
+          <img ng-src="{{ proveedor.image }}">
+          <h2>{{ proveedor.titulo }}</h2>
+          <p>{{ proveedor.descripcion }}</p>
+
+          <button class="button-clear" style="top:41px;right:10px;position:absolute;">
+            <i class="icon ion-chevron-right"></i>
+          </button>
+
+        </ion-item>
+
+      </ion-list>
+
+    </ion-scroll>
+
+  </ion-content>
+
+</ion-view>
