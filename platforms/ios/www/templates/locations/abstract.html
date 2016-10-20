@@ -15,16 +15,17 @@
             <h2>{{usuario.name}}</h2>
             <p>Back off, man. I'm a scientist.</p>
           </ion-item>
-          <ion-item ng-if="modo == 'usuario'" ng-click="goToProveedor()" menu-close>
-              <i class="icon ion-android-calendar"></i>
-              Empezar a trabajar
-            </ion-item>
-          </ion-list>
-          <ion-item ng-if="modo == 'proveedor'" ng-click="goToUsuario()" menu-close>
+
+          <ion-item ng-click="goToUsuario()" menu-close>
               <i class="icon ion-map"></i>
               Solicitar servicio
-            </ion-item>
-          </ion-list>
+          </ion-item>
+
+          <ion-item ng-click="goToProveedor()" menu-close>
+              <i class="icon ion-android-calendar"></i>
+              Empezar a trabajar
+          </ion-item>
+
           <ion-item menu-close ng-click="logout()">
             <i class="icon ion-log-out"></i>
             Cerrar Sesion
