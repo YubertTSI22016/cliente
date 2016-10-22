@@ -1,0 +1,36 @@
+<ion-view view-title="Servicios" class="locations-list" hide-back-button="true">
+
+  <ion-content class="has-header" scroll="false">
+
+    <div class="item item-input-inset item-dark">
+      <label class="item-input-wrapper">
+        <input type="text" placeholder="Search as you type" ng-model="filterModel">
+      </label>
+      <button class="button button-small button-clear button-clear" ng-click="filterModel='';">borrar</button>
+    </div>
+
+    <ion-scroll style="height:100%;">
+
+      <ion-list>
+
+        <ion-item class="item item-thumbnail-left"
+          ng-repeat="servicio in servicios | filter:filterModel"
+          ui-sref="locations.detalle({ id : servicio.id })"
+          >
+          <img ng-src="{{servicio.image}}">
+          <h2>{{servicio.nombre}}</h2>
+          <p>{{servicio.descripccion}}</p>
+
+          <button class="button-clear" style="top:41px;right:10px;position:absolute;">
+            <i class="icon ion-chevron-right"></i>
+          </button>
+
+        </ion-item>
+
+      </ion-list>
+
+    </ion-scroll>
+
+  </ion-content>
+
+</ion-view>

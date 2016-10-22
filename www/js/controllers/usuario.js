@@ -3,8 +3,6 @@ angular.module('app')
   .controller('UsuarioCtrl', function ($scope, $ionicAuth, $ionicUser, ProveedorService, $ionicLoading, $state, $ionicSideMenuDelegate, uiGmapGoogleMapApi, uiGmapIsReady, $ionicPopup, PusherService) {
     $scope.markers = [];
 
-    console.log('usuario')
-
     PusherService.unbindAll();
 
     if (!$ionicAuth.isAuthenticated()) {
@@ -61,19 +59,6 @@ angular.module('app')
         });
       }
     };
-
-    uiGmapIsReady.promise(1).then(function(instances) {
-      var map = instances[0].map;
-      $scope.map = map;
-
-      navigator.geolocation.getCurrentPosition(function (pos) {
-        setCurrentLocation(pos);
-      }, function (error) {
-        alert('getCurrentPosition Unable to get location: ' + error);
-      });
-
-      $scope.cargarProveedores();
-    });
 
     $scope.cargarProveedores = function(){
       ProveedorService.getActivos().then(function(collection) {
@@ -143,5 +128,20 @@ angular.module('app')
         }
       );
     };
+
+    uiGmapIsReady.promise(2).then(function(instances) {
+      var map = instances[1].map;
+      $scope.map = map;
+
+      console.log('usuario', map.uiGmap_id)
+
+      navigator.geolocation.getCurrentPosition(function (pos) {
+        setCurrentLocation(pos);
+      }, function (error) {
+        alert('getCurrentPosition Unable to get location: ' + error);
+      });
+
+      $scope.cargarProveedores();
+    });
 
   });

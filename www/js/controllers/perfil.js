@@ -26,4 +26,12 @@ angular.module('app')
       $state.go('locations.proveedor');
     };
 
+    $scope.goToPagos = function(){
+      $state.go('locations.pagos');
+    };
+
+    $scope.goToServicios = function(){
+      $state.go('locations.servicios');
+    };
+
   });

@@ -16,14 +16,24 @@
             <p>Back off, man. I'm a scientist.</p>
           </ion-item>
 
+          <ion-item ng-click="goToPagos()" menu-close>
+            <i class="icon ion-card"></i>
+            Pagos
+          </ion-item>
+
           <ion-item ng-click="goToUsuario()" menu-close>
-              <i class="icon ion-map"></i>
-              Solicitar servicio
+            <i class="icon ion-map"></i>
+            Solicitar servicio
           </ion-item>
 
           <ion-item ng-click="goToProveedor()" menu-close>
-              <i class="icon ion-android-calendar"></i>
-              Empezar a trabajar
+            <i class="icon ion-android-calendar"></i>
+            Empezar a trabajar
+          </ion-item>
+
+          <ion-item ng-click="goToServicios()" menu-close>
+            <i class="icon ion-android-calendar"></i>
+            Servicios activos
           </ion-item>
 
           <ion-item menu-close ng-click="logout()">
