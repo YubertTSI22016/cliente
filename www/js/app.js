@@ -105,8 +105,7 @@ angular.module('app', ['ionic', 'ionic.cloud', 'uiGmapgoogle-maps', 'pusher-angu
           controller  : 'CalificarCtrl'
         }
       }
-    })
-    .state('locations.pagos', {
+    }).state('locations.pagos', {
       url   : '/pagos',
       cache : false,
       views : {
@@ -119,7 +118,10 @@ angular.module('app', ['ionic', 'ionic.cloud', 'uiGmapgoogle-maps', 'pusher-angu
 })
 
 .controller('WelcomeCtrl', function ($scope, CONFIG, $ionicModal, $state, $ionicPopup, $window, $ionicAuth, $ionicUser) {
-    $scope.loginData    = {};
+    $scope.loginData    = {
+      username : 'user@user.com',
+      password : 'user',
+    };
     $scope.registroData = {};
 
     if ($ionicAuth.isAuthenticated()) {

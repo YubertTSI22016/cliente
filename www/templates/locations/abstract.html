@@ -21,6 +21,11 @@
             Pagos
           </ion-item>
 
+          <ion-item ng-click="goToServicios()" menu-close>
+            <i class="icon ion-ios-timer-outline"></i>
+            Servicios
+          </ion-item>
+
           <ion-item ng-click="goToUsuario()" menu-close>
             <i class="icon ion-map"></i>
             Solicitar servicio
@@ -31,9 +36,9 @@
             Empezar a trabajar
           </ion-item>
 
-          <ion-item ng-click="goToServicios()" menu-close>
-            <i class="icon ion-android-calendar"></i>
-            Servicios activos
+          <ion-item ng-click="serProveedor()" menu-close>
+            <i class="icon ion-person-add"></i>
+            Ser Proveedor
           </ion-item>
 
           <ion-item menu-close ng-click="logout()">
