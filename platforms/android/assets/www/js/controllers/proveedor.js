@@ -3,8 +3,6 @@ angular.module('app')
   .controller('ProveedorCtrl', function ($scope, $ionicAuth, ProveedorService, $ionicLoading, $state, $ionicSideMenuDelegate, uiGmapGoogleMapApi, uiGmapIsReady, $ionicPopup, PusherService) {
     $scope.markers = [];
 
-    console.log('proveedor')
-
     PusherService.unbindAll();
 
     if (!$ionicAuth.isAuthenticated()) {
@@ -20,7 +18,7 @@ angular.module('app')
       options : {
         mapTypeControl : false,
         streetViewControl : false,
-        styles: [{"featureType":"administrative.land_parcel","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"landscape.man_made","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"simplified"},{"lightness":20}]},{"featureType":"road.highway","elementType":"geometry","stylers":[{"hue":"#f49935"}]},{"featureType":"road.highway","elementType":"labels","stylers":[{"visibility":"simplified"}]},{"featureType":"road.arterial","elementType":"geometry","stylers":[{"hue":"#fad959"}]},{"featureType":"road.arterial","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"road.local","elementType":"geometry","stylers":[{"visibility":"simplified"}]},{"featureType":"road.local","elementType":"labels","stylers":[{"visibility":"simplified"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"hue":"#a1cdfc"},{"saturation":30},{"lightness":49}]}]
+        styles: [{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#6195a0"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"landscape","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"color":"#e6f3d6"},{"visibility":"on"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45},{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#f4d2c5"},{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"labels.text","stylers":[{"color":"#4e4e4e"}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#f4f4f4"}]},{"featureType":"road.arterial","elementType":"labels.text.fill","stylers":[{"color":"#787878"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#eaf6f8"},{"visibility":"on"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":"#eaf6f8"}]}]
       }
     };
 
@@ -35,7 +33,7 @@ angular.module('app')
         scaledSize: new google.maps.Size(35, 35)
       };
 
-      var marker = _.find($scope.markers, ['id', 'usuario']);
+      var marker = _.find($scope.markers, ['id', 'proveedor']);
 
       if (marker) {
         marker['coords'] = {
@@ -44,7 +42,7 @@ angular.module('app')
         };
       } else {
         $scope.markers.push({
-          id          : 'usuario',
+          id          : 'proveedor',
           options     : { icon : image, draggable: true, animation: google.maps.Animation.DROP },
           title       : 'yo mismo',
           coords      : {
@@ -85,17 +83,6 @@ angular.module('app')
       });
     }
 
-    uiGmapIsReady.promise(2).then(function(instances) {
-      var map = instances[1].map;
-      $scope.map = map;
-
-      navigator.geolocation.getCurrentPosition(function (pos) {
-        setCurrentLocation(pos);
-      }, function (error) {
-        alert('getCurrentPosition Unable to get location: ' + error);
-      });
-    });
-
     $scope.centerOnMe = function () {
       if (!$scope.map) {
         return;
@@ -128,5 +115,18 @@ angular.module('app')
         }
       }
     );
+
+    uiGmapIsReady.promise(3).then(function(instances) {
+      var map = instances[2].map;
+      $scope.map = map;
+
+      console.log('proveedor', map.uiGmap_id)
+
+      navigator.geolocation.getCurrentPosition(function (pos) {
+        setCurrentLocation(pos);
+      }, function (error) {
+        alert('getCurrentPosition Unable to get location: ' + error);
+      });
+    });
 
   });

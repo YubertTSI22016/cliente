@@ -7718,8 +7718,8 @@ a.button {
 .scroll {
   height: 100%; }
 
-.project-detail .bar {
-  background: none; }
+// .project-detail .bar {
+//   background: none; }
 .project-detail .header-slideshow-wrapper {
   position: relative;
   height: 220px;
@@ -7783,16 +7783,16 @@ body, html {
   background: #252729; }
   .platform-browser .tabs-top > .tabs *, .platform-browser .tabs.tabs-top * {
     color: white !important; }
-// .platform-browser .bar.bar-special {
-//   height: 65px; }
-//   .platform-browser .bar.bar-special .title {
-//     margin-top: 19px; }
-//     .platform-browser .bar.bar-special .title + .buttons {
-//       top: 19px; }
-//   .platform-browser .bar.bar-special .back-button {
-//     margin-top: 15px; }
-//   .platform-browser .buttons-left {
-//     margin-top: 15px; }
+.platform-browser .bar.bar-special {
+  height: 65px; }
+  .platform-browser .bar.bar-special .title {
+    margin-top: 19px; }
+    .platform-browser .bar.bar-special .title + .buttons {
+      top: 19px; }
+  .platform-browser .bar.bar-special .back-button {
+    margin-top: 15px; }
+  .platform-browser .buttons-left {
+    margin-top: 15px; }
 
 ion-content .button {
   text-transform: uppercase;
@@ -7807,5 +7807,5 @@ ion-content .button {
   font-size: 12px;
   letter-spacing: 2px; }
 
-// .has-header {
-//   top: 65px; }
+.has-header {
+  top: 65px; }

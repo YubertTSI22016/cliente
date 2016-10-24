@@ -78,12 +78,21 @@ angular.module('app', ['ionic', 'ionic.cloud', 'uiGmapgoogle-maps', 'pusher-angu
         }
       }
     })
-    .state('locations.servicio', {
-      url   : '/servicio/:id',
+    .state('locations.servicios', {
+      url   : '/servicios',
       cache : false,
       views : {
         'view-container' : {
-          templateUrl : 'templates/locations/_servicio.html',
+          templateUrl : 'templates/locations/_servicios.html',
+          controller  : 'ServicioCtrl'
+        }
+      }
+    }).state('locations.detalle', {
+      url   : '/servicios/:id',
+      cache : false,
+      views : {
+        'view-container' : {
+          templateUrl : 'templates/locations/_detalle-servicio.html',
           controller  : 'ServicioCtrl'
         }
       }
@@ -96,11 +105,23 @@ angular.module('app', ['ionic', 'ionic.cloud', 'uiGmapgoogle-maps', 'pusher-angu
           controller  : 'CalificarCtrl'
         }
       }
+    }).state('locations.pagos', {
+      url   : '/pagos',
+      cache : false,
+      views : {
+        'view-container' : {
+          templateUrl : 'templates/locations/_pagos.html',
+          controller  : 'PagosCtrl'
+        }
+      }
     });
 })
 
 .controller('WelcomeCtrl', function ($scope, CONFIG, $ionicModal, $state, $ionicPopup, $window, $ionicAuth, $ionicUser) {
-    $scope.loginData    = {};
+    $scope.loginData    = {
+      username : 'user@user.com',
+      password : 'user',
+    };
     $scope.registroData = {};
 
     if ($ionicAuth.isAuthenticated()) {

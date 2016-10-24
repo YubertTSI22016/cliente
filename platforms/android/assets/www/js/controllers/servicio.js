@@ -1,18 +1,22 @@
 angular.module('app')
 
-  .controller('ServicioCtrl', function ($scope, $state, $ionicLoading, $stateParams, PusherService, ProveedorService) {
+  .controller('ServicioCtrl', function ($scope, $state, $ionicLoading, $stateParams, ServicioService) {
     $ionicLoading.show();
 
-    ProveedorService.getById($stateParams.id).then(function(proveedor){
+    var id = $stateParams && $stateParams['id'] ? $stateParams['id'] : null;
 
-      $scope.proveedor = proveedor;
+    console.log(id);
 
-      $ionicLoading.hide();
-
-    });
-
-    $scope.finalizar = function(){
-      $state.go('locations.proveedor');
+    if(id){
+      ServicioService.getById(id).then(function(data){
+        $scope.servicio = data;
+        $ionicLoading.hide();
+      });
+    }else{
+      ServicioService.getActivos().then(function(data){
+        $scope.servicios = data;
+        $ionicLoading.hide();
+      });
     }
 
   });
