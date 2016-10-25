@@ -13,6 +13,8 @@ angular.module('app')
       }
     }
 
+    console.log('info', $ionicUser.get('info'))
+
     $scope.logout = function() {
       $ionicAuth.logout();
       $state.go('welcome');

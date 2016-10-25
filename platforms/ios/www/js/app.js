@@ -1,8 +1,9 @@
 angular.module('app', ['ionic', 'ionic.cloud', 'uiGmapgoogle-maps', 'pusher-angular', 'app.map'])
 
 .constant('CONFIG', {
-  'URL'             : 'http://localhost',
+  'URL'             : 'http://172.20.10.3:8080/yuberapi/rest/',
   'TENANT'          : 'tenant',
+  'TENANTID'        : 'b378b367-b024-4168-86dc-fdf0c21ee200',
   'FACEBOOK'        : true,
   'PUSHER_KEY'      : 'c2f52caa39102181e99f',
   'NOMBRE_EMPRESA'  : 'YUBER',
@@ -21,7 +22,7 @@ angular.module('app', ['ionic', 'ionic.cloud', 'uiGmapgoogle-maps', 'pusher-angu
   $rootScope.CONFIG = CONFIG;
 })
 
-.config(function($stateProvider, $urlRouterProvider, $ionicCloudProvider, uiGmapGoogleMapApiProvider) {
+.config(function($stateProvider, $urlRouterProvider, $ionicCloudProvider, uiGmapGoogleMapApiProvider, CONFIG, $httpProvider) {
   $ionicCloudProvider.init({
     'core' : {
       'app_id' : '324566f8'
@@ -33,6 +34,8 @@ angular.module('app', ['ionic', 'ionic.cloud', 'uiGmapgoogle-maps', 'pusher-angu
       v: '3.20', //defaults to latest 3.X anyhow
       libraries: 'weather,geometry,visualization'
   });
+
+  $httpProvider.defaults.headers.common['yuber-tenant'] = CONFIG.TENANTID;
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/welcome');
@@ -117,12 +120,16 @@ angular.module('app', ['ionic', 'ionic.cloud', 'uiGmapgoogle-maps', 'pusher-angu
     });
 })
 
-.controller('WelcomeCtrl', function ($scope, CONFIG, $ionicModal, $state, $ionicPopup, $window, $ionicAuth, $ionicUser) {
+.controller('WelcomeCtrl', function ($scope, CONFIG, $ionicModal, $state, $ionicPopup, $window, $ionicAuth, $ionicUser, registroService) {
     $scope.loginData    = {
       username : 'user@user.com',
       password : 'user',
     };
     $scope.registroData = {};
+
+    registroService.algo().then(function(proveedor){
+
+    });
 
     if ($ionicAuth.isAuthenticated()) {
       $state.go('locations.usuario');

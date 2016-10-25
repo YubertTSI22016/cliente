@@ -1,6 +1,6 @@
 angular.module('app')
 
-  .controller('ProveedorCtrl', function ($scope, $ionicAuth, ProveedorService, $ionicLoading, $state, $ionicSideMenuDelegate, uiGmapGoogleMapApi, uiGmapIsReady, $ionicPopup, PusherService) {
+  .controller('ProveedorCtrl', function ($scope, $ionicAuth, $ionicLoading, $state, $ionicSideMenuDelegate, uiGmapGoogleMapApi, uiGmapIsReady, $ionicPopup, PusherService) {
     $scope.markers = [];
 
     PusherService.unbindAll();

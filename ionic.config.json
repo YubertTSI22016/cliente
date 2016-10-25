@@ -9,5 +9,11 @@
     "scss/**/*",
     "www/**/*",
     "!www/lib/**/*"
+  ],
+  "proxies": [
+    {
+      "path": "/yuberapi/rest/",
+      "proxyUrl": "http://192.168.1.45:8080/yuberapi/rest/"
+    }
   ]
 }
