@@ -1,9 +1,10 @@
 angular.module('app', ['ionic', 'ionic.cloud', 'uiGmapgoogle-maps', 'pusher-angular', 'app.map'])
 
 .constant('CONFIG', {
-  'URL'             : 'http://172.20.10.3:8080/yuberapi/rest/',
+  // 'URL'             : '/yuberapi/rest/',
+  'URL'             : 'http://10.0.22.195:8080/yuberapi/rest/',
+  'TENANT_ID'       : 'b378b367-b024-4168-86dc-fdf0c21ee200',
   'TENANT'          : 'tenant',
-  'TENANTID'        : 'b378b367-b024-4168-86dc-fdf0c21ee200',
   'FACEBOOK'        : true,
   'PUSHER_KEY'      : 'c2f52caa39102181e99f',
   'NOMBRE_EMPRESA'  : 'YUBER',
@@ -23,6 +24,8 @@ angular.module('app', ['ionic', 'ionic.cloud', 'uiGmapgoogle-maps', 'pusher-angu
 })
 
 .config(function($stateProvider, $urlRouterProvider, $ionicCloudProvider, uiGmapGoogleMapApiProvider, CONFIG, $httpProvider) {
+  $httpProvider.defaults.headers.common['yuber-tenant'] = CONFIG.TENANT_ID;
+
   $ionicCloudProvider.init({
     'core' : {
       'app_id' : '324566f8'
@@ -34,8 +37,6 @@ angular.module('app', ['ionic', 'ionic.cloud', 'uiGmapgoogle-maps', 'pusher-angu
       v: '3.20', //defaults to latest 3.X anyhow
       libraries: 'weather,geometry,visualization'
   });
-
-  $httpProvider.defaults.headers.common['yuber-tenant'] = CONFIG.TENANTID;
 
   // if none of the above states are matched, use this as the fallback
   $urlRouterProvider.otherwise('/welcome');
@@ -120,16 +121,12 @@ angular.module('app', ['ionic', 'ionic.cloud', 'uiGmapgoogle-maps', 'pusher-angu
     });
 })
 
-.controller('WelcomeCtrl', function ($scope, CONFIG, $ionicModal, $state, $ionicPopup, $window, $ionicAuth, $ionicUser, registroService) {
+.controller('WelcomeCtrl', function ($scope, CONFIG, $ionicModal, $state, $ionicPopup, $window, $ionicAuth, $ionicUser, UsuarioService) {
     $scope.loginData    = {
       username : 'user@user.com',
       password : 'user',
     };
     $scope.registroData = {};
-
-    registroService.algo().then(function(proveedor){
-
-    });
 
     if ($ionicAuth.isAuthenticated()) {
       $state.go('locations.usuario');
@@ -167,32 +164,93 @@ angular.module('app', ['ionic', 'ionic.cloud', 'uiGmapgoogle-maps', 'pusher-angu
       var password = $scope.loginData.password;
 
       var details = { 'email' : username, 'password' : password };
+      var user    = { 'usuario' : username, 'clave' : password };
 
-      $ionicAuth.login('basic', details).then(function(){
-        $scope.modal.hide();
-        $state.go('locations.usuario');
+      $ionicAuth.login('basic', details).then( function(){
+        
+        UsuarioService.login(user).then(function (usuario) {
+          $ionicUser.set('info', usuario);
+
+          $scope.modal.hide();
+          $state.go('locations.usuario');
+        }, function(err) {
+          alert(err.message);
+          $scope.backToWelcomePage();
+        });
+
+      }, function(err) {
+          alert(err.message);
+          $scope.backToWelcomePage();
       });
     };
 
     $scope.doFacebookLogin = function(){
       $ionicAuth.login('facebook').then( function(success) {
-        $state.go('locations.usuario');
+        var details = { 
+          uid     : $ionicUser.social.facebook.data.uid + '',
+          email   : $ionicUser.social.facebook.data.email,
+          nombre  : $ionicUser.social.facebook.data.full_name
+        }
+
+        UsuarioService.loginFacebook(details).then(function(usuario){
+          $ionicUser.set('info', usuario);
+          $ionicUser.save();
+
+          $state.go('locations.usuario');
+        }, function(err) {
+          alert(err.message);
+          $scope.backToWelcomePage();
+        });
+
       }, function(err) {
           alert(err.message);
+          $scope.backToWelcomePage();
       });
     };
 
     $scope.doRegistro = function() {
-      var username = $scope.registroData.username;
-      var password = $scope.registroData.password;
+      var username  = $scope.registroData.username;
+      var password  = $scope.registroData.password;
+      var nombre    = $scope.registroData.nombre;
+      var apellido  = $scope.registroData.apellido;
 
-      var details = { 'email' : username, 'password' : password };
+      var user    = { 'email' : { 'email' : username }, 'clave' : password, 'nombre' : nombre, 'apellido' : apellido };
+      var details = { 'email' : username, 'password' : password, 'name' : nombre + ' ' + apellido };
 
-      $ionicAuth.signup(details).then(function() {
-        $scope.modal.hide();
-        $state.go('locations.usuario');
+      // registrar el usuario en yuber
+      UsuarioService.add(user).then(function(usuario) {
+
+        // registrar el usuario en ionic
+        $ionicAuth.signup(details).then(function() {
+
+          // iniciar sesion en ionic
+          $ionicAuth.login('basic', { 'email' : username, 'password' : password }).then( function(){
+
+            // iniciar session en yuber
+            UsuarioService.login({ 'usuario' : username, 'clave' : password }).then(function () {
+              $ionicUser.set('info', usuario);
+              $ionicUser.save();
+
+              $scope.modal.hide();
+              $state.go('locations.usuario');
+            }, function(err) {
+              alert(err.message);
+              $scope.backToWelcomePage();
+            });
+
+          }, function(err) {
+              alert(err.message);
+              $scope.backToWelcomePage();
+          });
+
+        }, function(err) {
+          alert(err.message);
+          $scope.backToWelcomePage();
+        });
+
       }, function(err) {
         alert(err.message);
+        $scope.backToWelcomePage();
       });
     };
 

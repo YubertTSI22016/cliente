@@ -872,7 +872,7 @@
 
 - (void)webViewDidFinishLoad:(UIWebView*)theWebView
 {
-    // update url, stop spinner, update back/forward
+    // update url, stop spi nner, update back/forward
 
     self.addressLabel.text = [self.currentURL absoluteString];
     self.backButton.enabled = theWebView.canGoBack;
