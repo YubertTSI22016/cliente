@@ -133,8 +133,23 @@ angular.module('app')
           return defer.promise;
       };
 
+      var add = function(proveedor){
+          var defer = $q.defer();
+
+          $http.post(CONFIG.URL + 'vertical/altaproveedor/', proveedor)
+          .success(function (datos) {
+              defer.resolve(datos);
+          })
+          .error(function(){
+              defer.reject('server error')
+          });
+
+          return defer.promise;
+      };
+
       return {
+          add         : add,
+          getById     : getById,
           getActivos  : getActivos,
-          getById     : getById
       }
   }

@@ -1,8 +1,8 @@
-angular.module('app', ['ionic', 'ionic.cloud', 'uiGmapgoogle-maps', 'pusher-angular', 'app.map'])
+angular.module('app', ['ionic', 'ionic.cloud', 'uiGmapgoogle-maps', 'pusher-angular'])
 
 .constant('CONFIG', {
-  // 'URL'             : '/yuberapi/rest/',
-  'URL'             : 'http://10.0.22.195:8080/yuberapi/rest/',
+  'URL'             : '/yuberapi/rest/',
+  // 'URL'             : 'http://10.0.22.195:8080/yuberapi/rest/',
   'TENANT_ID'       : 'b378b367-b024-4168-86dc-fdf0c21ee200',
   'TENANT'          : 'tenant',
   'FACEBOOK'        : true,

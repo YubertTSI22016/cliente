@@ -45,9 +45,24 @@ angular.module('app')
           return defer.promise;
       };
 
+      var edit = function(usuario){
+          var defer = $q.defer();
+
+          $http.post(CONFIG.URL + 'vertical/modificarusuario/', usuario)
+          .success(function (enc) {
+              defer.resolve(enc);
+          })
+          .error(function(){
+              defer.reject('server error')
+          });
+
+          return defer.promise;
+      };
+
       return {
-          login         : login,
           add           : add,
+          edit          : edit,
+          login         : login,
           loginFacebook : loginFacebook,
       }
   }

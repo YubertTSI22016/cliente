@@ -1,16 +1,76 @@
-<ion-view view-title="{{CONFIG.NOMBRE_EMPRESA}}" class="project-detail" hide-back-button="true">
+<ion-view view-title="Pagos" class="project-detail" hide-back-button="true">
 
   <ion-content>
 
-    <ion-scroll class="padding">
-      <button class="button button-full button-balanced" ng-click="finalizar()">Finalizar servicio</button>
-      <h1>{{proveedor.titulo}}</h1>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores beatae, cupiditate deserunt dolore dolorem eius eos harum in molestias mollitia nihil nostrum odio praesentium provident quaerat repellat sint veritatis. Laudantium.</p>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores beatae, cupiditate deserunt dolore dolorem eius eos harum in molestias mollitia nihil nostrum odio praesentium provident quaerat repellat sint veritatis. Laudantium.</p>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores beatae, cupiditate deserunt dolore dolorem eius eos harum in molestias mollitia nihil nostrum odio praesentium provident quaerat repellat sint veritatis. Laudantium.</p>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores beatae, cupiditate deserunt dolore dolorem eius eos harum in molestias mollitia nihil nostrum odio praesentium provident quaerat repellat sint veritatis. Laudantium.</p>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores beatae, cupiditate deserunt dolore dolorem eius eos harum in molestias mollitia nihil nostrum odio praesentium provident quaerat repellat sint veritatis. Laudantium.</p>
-    </ion-scroll>
+    <form ng-submit="doPago()">
+      <div class="list">
+        <div class="card">
+          <div class="item item-divider">
+            Pago de usuario
+          </div>
+          <div class="item item-text-wrap">
+            <div class="list">
+              <ion-item class="item" ng-repeat="ut in usuarioTarjetas">
+                <h2>{{ut.nombre}}</h2>
+                <p>{{ut.descripccion}}</p>
+              </ion-item>
+              <ion-item class="item" ng-if="!usuarioTarjetas">
+                <label class="item item-input">
+                  <input type="text" ng-model="pago.numero" placeholder="Numero de tarjeta">
+                </label>
+                <label class="item item-input">
+                  <input type="text" ng-model="pago.cvc" placeholder="CVC">
+                </label>
+                <label class="item item-input">
+                  <input class="col" ng-model="pago.mm" type="text" placeholder="MM">
+                  <input class="col" ng-model="pago.yy" type="text" placeholder="AA">
+                </label>
+                <div class="padding-left padding-right">
+                  <button class="button button-block button-energized" type="submit">Guardar pago</button>
+                </div>
+              </ion-item>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <form ng-submit="doPagoProveedor()">
+      <div class="list">
+        <div class="card">
+          <div class="item item-divider">
+            Pago de proveedor
+          </div>
+          <div class="item item-text-wrap">
+            <div class="list">
+              <ion-item class="item" ng-repeat="pt in proveedorTarjetas">
+                <h2>{{pt.nombre}}</h2>
+                <p>{{pt.descripccion}}</p>
+              </ion-item>
+              <ion-item class="item" ng-if="!proveedorTarjetas">
+                <label class="item item-input">
+                  <input type="text" ng-model="pagoProveedor.numero" placeholder="Numero de tarjeta">
+                </label>
+                <label class="item item-input">
+                  <input type="text" ng-model="pagoProveedor.cvc" placeholder="CVC">
+                </label>
+                <label class="item item-input">
+                  <input class="col" ng-model="pagoProveedor.mm" type="text" placeholder="MM">
+                  <input class="col" ng-model="pagoProveedor.yy" type="text" placeholder="AA">
+                </label>
+                <div class="padding-left padding-right">
+                  <button class="button button-block button-energized" type="submit">Guardar pago</button>
+                </div>
+              </ion-item>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div class="_item" style="text-align:center; line-height:15px; margin-bottom: 5px;">
+      <small style="width:80%;">Al registrar un medio de pago aceptas nuestros <br /> Terminos de Servicios y Avisos de Privacidad</small>
+    </div>
 
   </ion-content>
 

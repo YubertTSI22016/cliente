@@ -1,0 +1,58 @@
+<ion-view view-title="Modificar Perfil" class="project-detail" hide-back-button="true">
+
+  <ion-header-bar class="bar bar-dark bar-special">
+    <h1 class="title">Modificar Perfil</h1>
+
+    <div class="buttons">
+      <button class="button button-clear button-energized" ng-click="cerrarModal()">Cerrar</button>
+    </div>
+  </ion-header-bar>
+
+  <ion-content>
+    <form ng-submit="doPerfil()">
+    
+      <div class="card">
+        <div class="item item-divider">
+          Informaci&oacute;n de usuario
+        </div>
+        <div class="item item-text-wrap">
+          <div class="list">
+            <label class="item item-input">
+              <input type="text" ng-model="usuario.nombre" placeholder="Nombre">
+            </label>
+            <label class="item item-input">
+              <input type="text" ng-model="usuario.apellido" placeholder="Apellido">
+            </label>
+            <label class="item item-input">
+              <input type="text" ng-model="usuario.telefonoContacto.telefono" placeholder="Telefono">
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" ng-if="usuario.proveedor">
+        <div class="item item-divider">
+          Informaci&oacute;n de proveedor
+        </div>
+        <div class="item item-text-wrap">
+          <div class="list">
+            <label class="item item-input">
+              <input type="text" ng-model="usuario.proveedor.nombre" placeholder="Nombre">
+            </label>
+            <label class="item item-input">
+              <input type="text" ng-model="usuario.proveedor.telefono.telefono" placeholder="Telefono">
+            </label>
+            <label class="item item-input">
+              <textarea ng-model="usuario.proveedor.descripcion" placeholder="Descripccion"></textarea>
+            </label>
+          </div>
+        </div>
+      </div>
+      <div class="padding-left padding-right">
+        <button class="button button-block button-energized" type="submit">Guardar</button>
+      </div>
+    </form>
+
+  </ion-content>
+
+</ion-view>

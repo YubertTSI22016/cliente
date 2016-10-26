@@ -1,38 +1,39 @@
-<ion-view view-title="Ser Proveedor" class="project-detail" hide-back-button="true">
+<ion-view view-title="Trabajar con nostoros" class="project-detail" hide-back-button="true">
 
   <ion-header-bar class="bar bar-dark bar-special">
-    <h1 class="title">Ser Proveedor</h1>
+    <h1 class="title">Trabajar con nostoros</h1>
 
     <div class="buttons">
-      <button class="button button-clear button-energized" ng-click="cerrarSerProveedor()">Cerrar</button>
+      <button class="button button-clear button-energized" ng-click="cerrarModal()">Cerrar</button>
     </div>
   </ion-header-bar>
 
   <ion-content>
 
     <form ng-submit="doSerProveedor()">
-
-      <div class="list">
-
-        <label class="item item-input">
-          <input type="text" ng-model="proveedorData.nombre" placeholder="Nombre">
-        </label>
-
-        <label class="item item-input item-stacked-label">
-          <textarea placeholder="Descripccion" ng-model="proveedorData.descripccion"></textarea>
-        </label>
-
-        <div class="padding-left padding-right">
-          <button class="button button-block button-energized" type="submit">Solicitar</button>
+      <div class="card">
+        <div class="item item-text-wrap">
+          <div class="list">
+            <label class="item item-input">
+              <input type="text" ng-model="proveedorData.nombre" placeholder="Nombre">
+            </label>
+            <label class="item item-input">
+              <input type="text" ng-model="proveedorData.telefono.telefono" placeholder="Telefono">
+            </label>
+            <label class="item item-input item-stacked-label">
+              <textarea ng-model="proveedorData.descripcion" placeholder="Descripccion"></textarea>
+            </label>
+            <div class="padding-left padding-right">
+              <button class="button button-block button-energized" type="submit">Solicitar</button>
+            </div>
+          </div>
         </div>
-
-        <div class="_item" style="text-align:center; line-height:15px; margin-bottom: 5px;">
-          <small style="width:80%;">Al registrarse aceptas nuestros <br /> Terminos de Servicios y Avisos de Privacidad</small>
-        </div>
-
       </div>
-
     </form>
+
+    <div class="_item" style="text-align:center; line-height:15px; margin-bottom: 5px;">
+      <small style="width:80%;">Al registrarse aceptas nuestros <br /> Terminos de Servicios y Avisos de Privacidad</small>
+    </div>
 
   </ion-content>
 
