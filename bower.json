@@ -7,6 +7,7 @@
   "dependencies": {
     "angular-google-maps": "^2.4.0",
     "pusher-angular": "^0.1.9",
-    "pusher-websocket-iso": "pusher#^3.2.1"
+    "pusher-websocket-iso": "pusher#^3.2.1",
+    "ionic-rating": "^0.3.0"
   }
 }

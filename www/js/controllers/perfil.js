@@ -29,6 +29,10 @@ angular.module('app')
       $state.go('locations.servicios');
     };
 
+    $scope.goToGanancias = function(){
+      $state.go('locations.ganancias');
+    };
+
     $scope.cerrarModal = function(){
       $scope.modal.hide();
     };
@@ -74,6 +78,7 @@ angular.module('app')
       var usuarioData = angular.copy(this.usuario);
 
       delete usuarioData['imagen'];
+      delete usuarioData['clave'];
 
       UsuarioService.edit(usuarioData).then(function (usuario) {
         $ionicUser.set('info', usuario);

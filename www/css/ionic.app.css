@@ -5773,7 +5773,7 @@ input, button, select, textarea {
   padding-left: 4px;
   height: 29px;
   background: transparent;
-  line-height: 18px; }
+  line-height: 18px; width: 100%;}
 
 .item-input-wrapper ~ .button {
   margin-left: 10.66667px; }
@@ -7809,3 +7809,32 @@ ion-content .button {
 
 .has-header {
   top: 65px; }
+
+.ganancia-fixed {
+  height: 249px;
+  overflow: hidden;
+  width: 100%;
+  position: absolute;
+  background: white;
+  display: block;
+  bottom: 0;
+}
+
+.ganancia-scroller {
+  position: absolute;
+  background: #E2E2E2;
+  height: calc(100% - 202px);
+  height: -webkit-calc(100% - 202px);
+  width: 100%;
+  top:0;
+}
+.ganancia-scroller .list-scroll .list {
+    height: calc(100% - 44px) }
+  .ganancia-scroller .ionic-scroll {
+    height: calc(100% - 74px) }
+  .ganancia-scroller .item-scroll {
+    color: #818284;
+    background: #F7F7F7; }
+
+.scroll {
+  height: 100%; }

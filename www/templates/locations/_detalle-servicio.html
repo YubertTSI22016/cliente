@@ -11,16 +11,25 @@
     <div class="header-slideshow-wrapper">
 
       <hgroup class="header-overlay">
-        <h5>creado por Andrulo</h5>
+        <h5>creado por {{servicio.usuario.nombre}} {{servicio.usuario.apellido}}</h5>
       </hgroup>
 
     </div>
 
     <ion-scroll class="padding" style="height: 448px">
-      <button class="button button-full button-balanced" ng-click="finalizar()">Finalizar servicio</button>
-      <h1>{{servicio.nombre}}</h1>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores beatae, cupiditate deserunt dolore dolorem eius eos harum in molestias mollitia nihil nostrum odio praesentium provident quaerat repellat sint veritatis. Laudantium.</p>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Asperiores beatae, cupiditate deserunt dolore dolorem eius eos harum in molestias mollitia nihil nostrum odio praesentium provident quaerat repellat sint veritatis. Laudantium.</p>
+      <h6 class="text-center">{{servicio.estado}}</h6>
+      <p>{{servicio.descripcion}}</p>
+      <div class="list">
+        <a class="item item-icon-left" ng-href="mailto:{{servicio.usuario.email.email}}">
+          <i class="icon ion-email"></i>
+          {{servicio.usuario.email.email}}
+        </a>
+        <a class="item item-icon-left" ng-href="tel:{{servicio.usuario.telefonoContacto.telefono}}">
+          <i class="icon ion-ios-telephone"></i>
+          {{servicio.usuario.telefonoContacto.telefono || 'No tiene'}}
+        </a>
+      </div>
+      <button class="button button-full button-balanced" ng-click="finalizar()" ng-if="servicio.estado != 'Finalizado'">Finalizar servicio</button>
     </ion-scroll>
 
   </ion-content>

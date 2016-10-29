@@ -1,19 +1,12 @@
 angular.module('app')
 
-  .controller('PerfilCtrl', function ($scope, $state, $ionicAuth, $ionicUser, $ionicModal) {
+  .controller('PerfilCtrl', function ($scope, $state, $ionicAuth, $ionicUser, $ionicModal, UsuarioService, ProveedorService) {
+    $scope.usuario = $ionicUser.get('info');
     if ($ionicUser.social.facebook) {
-      $scope.usuario = {
-        name  : $ionicUser.social.facebook.data.full_name,
-        image : $ionicUser.social.facebook.data.profile_picture
-      }
+      $scope.usuario['imagen'] = $ionicUser.social.facebook.data.profile_picture;
     } else {
-      $scope.usuario = {
-        name  : $ionicUser.details.name || $ionicUser.details.email,
-        image : $ionicUser.details.image
-      }
+      $scope.usuario['imagen'] = $ionicUser.details.image;
     }
-
-    console.log('info', $ionicUser)
 
     $scope.logout = function() {
       $ionicAuth.logout();
@@ -36,6 +29,10 @@ angular.module('app')
       $state.go('locations.servicios');
     };
 
+    $scope.cerrarModal = function(){
+      $scope.modal.hide();
+    };
+
     $scope.serProveedor = function() {
       $ionicModal.fromTemplateUrl('templates/locations/_ser-proveedor.html', {
         scope : $scope
@@ -45,17 +42,44 @@ angular.module('app')
       });
     };
 
-    $scope.cerrarSerProveedor = function(){
-      $scope.modal.hide();
+    $scope.doSerProveedor = function() {
+      var proveedorData = this.proveedorData;
+      var usuario       = this.usuario;
+
+      proveedorData['usuario'] = {
+        id : usuario.id
+      }
+
+      ProveedorService.add(proveedorData).then(function (proveedor) {
+        usuario['proveedor'] = proveedor;
+        $ionicUser.set('info', usuario);
+        $ionicUser.save();
+
+        $scope.modal.hide();
+      }, function(err) {
+        alert(err.message);
+      });
     };
 
-    $scope.doSerProveedor = function() {
-      var username = $scope.registroData.username;
-      var password = $scope.registroData.password;
+    $scope.perfil = function() {
+      $ionicModal.fromTemplateUrl('templates/locations/_perfil.html', {
+        scope : $scope
+      }).then(function(modal) {
+        $scope.modal = modal;
+        $scope.modal.show();
+      });
+    };
 
-      var details = { 'email' : username, 'password' : password };
+    $scope.doPerfil = function() {
+      var usuarioData = angular.copy(this.usuario);
 
-      $ionicAuth.signup(details).then(function() {
+      delete usuarioData['imagen'];
+      delete usuarioData['clave'];
+
+      UsuarioService.edit(usuarioData).then(function (usuario) {
+        $ionicUser.set('info', usuario);
+        $ionicUser.save();
+
         $scope.modal.hide();
       }, function(err) {
         alert(err.message);

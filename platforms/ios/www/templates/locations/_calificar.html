@@ -9,30 +9,32 @@
       </hgroup>
 
     </div>
+    
+    <form ng-submit="doCalificar()">
+      <ion-scroll class="padding">
+        <h5 <div class="text-center" style="letter-spacing:2px;margin-top:15px;margin-bottom: 12px;">Comparti tu opinion</h5>
 
-    <ion-scroll class="padding">
-      <h5 <div class="text-center" style="letter-spacing:2px;margin-top:15px;margin-bottom: 12px;">Comparti tu opinion</h5>
+        <div class="list">
+          <label class="item item-input item-stacked-label">
+            <span class="input-label">Comentario</span>
+            <textarea placeholder="Agregar un comentario" ng-model="reviewData.comentario"></textarea>
+          </label>
 
-      <div class="list">
-        <label class="item item-input item-stacked-label">
-          <span class="input-label">Comentario</span>
-          <textarea placeholder="Agregar un comentario" ng-model="review.valor"></textarea>
-        </label>
+          <div class="item item-divider">
+            Calificaci&oacute;n
+          </div>
 
-        <div class="item item-divider">
-          Calificacion
+          <div class="item range range-positive">
+            <i class="icon ion-sad-outline"></i>
+            <input type="range" min="0" max="100" ng-model="reviewData.calificacion">
+            <i class="icon ion-happy"></i>
+          </div>
+
+          <button class="button button-block button-balanced" type="submit">Calificar</button>
         </div>
 
-        <div class="item range range-positive">
-          <i class="icon ion-sad-outline"></i>
-          <input type="range" name="volume" min="0" max="100" value="50" ng-model="review.comentario">
-          <i class="icon ion-happy"></i>
-        </div>
-
-        <button class="button button-block button-balanced" ng-click="calificar()">Calificar</button>
-      </div>
-
-    </ion-scroll>
+      </ion-scroll>
+    </form>
 
   </ion-content>
 

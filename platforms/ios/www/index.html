@@ -22,6 +22,11 @@
     <script src="lib/pusher-websocket-iso/dist/web/pusher.js"></script>
     <script src="lib/pusher-angular/lib/pusher-angular.min.js"></script>
 
+    <script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+    <script type="text/javascript">
+      Stripe.setPublishableKey('pk_test_6pRNASCoBOKtIshFeQd4XMUh');
+    </script>
+
     <script src="cordova.js"></script>
 
     <!-- your app's js -->
@@ -40,11 +45,6 @@
     <script src="js/services/pusher.js"></script>
     <script src="js/services/servicio.js"></script>
     <script src="js/services/usuario.js"></script>
-
-    <!-- map -->
-    <script src="js/map/module.js"></script>
-    <script src="js/map/controllers/MapDetailCtrl.js"></script>
-
   </head>
   <body ng-app="app" class="platform-ios platform-android">
 

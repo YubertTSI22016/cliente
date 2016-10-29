@@ -1,13 +1,14 @@
-angular.module('app', ['ionic', 'ionic.cloud', 'uiGmapgoogle-maps', 'pusher-angular'])
+angular.module('app', ['ionic', 'ionic.cloud', 'ionic.rating', 'uiGmapgoogle-maps', 'pusher-angular'])
 
 .constant('CONFIG', {
+  'IONIC_ID'        : '324566f8',
   'URL'             : '/yuberapi/rest/',
   // 'URL'             : 'http://10.0.22.195:8080/yuberapi/rest/',
   'TENANT_ID'       : 'b378b367-b024-4168-86dc-fdf0c21ee200',
   'TENANT'          : 'tenant',
   'FACEBOOK'        : true,
   'PUSHER_KEY'      : 'c2f52caa39102181e99f',
-  'NOMBRE_EMPRESA'  : 'YUBER',
+  'NOMBRE_EMPRESA'  : 'YUBER'
 })
 
 .run(function($ionicPlatform, $rootScope, CONFIG) {
@@ -28,7 +29,7 @@ angular.module('app', ['ionic', 'ionic.cloud', 'uiGmapgoogle-maps', 'pusher-angu
 
   $ionicCloudProvider.init({
     'core' : {
-      'app_id' : '324566f8'
+      'app_id' : CONFIG.IONIC_ID
     }
   });
 
@@ -91,7 +92,8 @@ angular.module('app', ['ionic', 'ionic.cloud', 'uiGmapgoogle-maps', 'pusher-angu
           controller  : 'ServicioCtrl'
         }
       }
-    }).state('locations.detalle', {
+    })
+    .state('locations.serviciodetalle', {
       url   : '/servicios/:id',
       cache : false,
       views : {
@@ -100,7 +102,8 @@ angular.module('app', ['ionic', 'ionic.cloud', 'uiGmapgoogle-maps', 'pusher-angu
           controller  : 'ServicioCtrl'
         }
       }
-    }).state('locations.calificar', {
+    })
+    .state('locations.calificar', {
       url   : '/calificar/:id',
       cache : false,
       views : {
@@ -109,7 +112,8 @@ angular.module('app', ['ionic', 'ionic.cloud', 'uiGmapgoogle-maps', 'pusher-angu
           controller  : 'CalificarCtrl'
         }
       }
-    }).state('locations.pagos', {
+    })
+    .state('locations.pagos', {
       url   : '/pagos',
       cache : false,
       views : {
@@ -118,10 +122,20 @@ angular.module('app', ['ionic', 'ionic.cloud', 'uiGmapgoogle-maps', 'pusher-angu
           controller  : 'PagosCtrl'
         }
       }
+    })
+    .state('locations.ganancias', {
+      url   : '/ganancias',
+      cache : false,
+      views : {
+        'view-container' : {
+          templateUrl : 'templates/locations/_ganancias.html',
+          controller  : 'GananciasCtrl'
+        }
+      }
     });
 })
 
-.controller('WelcomeCtrl', function ($scope, CONFIG, $ionicModal, $state, $ionicPopup, $window, $ionicAuth, $ionicUser, UsuarioService) {
+.controller('WelcomeCtrl', function ($scope, CONFIG, $ionicModal, $state, $ionicPopup, $window, $ionicAuth, $ionicUser, $ionicLoading, UsuarioService) {
     $scope.loginData    = {
       username : 'user@user.com',
       password : 'user',
@@ -163,28 +177,34 @@ angular.module('app', ['ionic', 'ionic.cloud', 'uiGmapgoogle-maps', 'pusher-angu
       var username = $scope.loginData.username;
       var password = $scope.loginData.password;
 
+      $ionicLoading.show();
+
       var details = { 'email' : username, 'password' : password };
       var user    = { 'usuario' : username, 'clave' : password };
 
       $ionicAuth.login('basic', details).then( function(){
-        
         UsuarioService.login(user).then(function (usuario) {
           $ionicUser.set('info', usuario);
 
           $scope.modal.hide();
+          $ionicLoading.hide();
           $state.go('locations.usuario');
         }, function(err) {
           alert(err.message);
+          $ionicAuth.logout();
+          $ionicLoading.hide();
           $scope.backToWelcomePage();
         });
-
       }, function(err) {
           alert(err.message);
+          $ionicAuth.logout();
+          $ionicLoading.hide();
           $scope.backToWelcomePage();
       });
     };
 
     $scope.doFacebookLogin = function(){
+      $ionicLoading.show();
       $ionicAuth.login('facebook').then( function(success) {
         var details = { 
           uid     : $ionicUser.social.facebook.data.uid + '',
@@ -196,14 +216,18 @@ angular.module('app', ['ionic', 'ionic.cloud', 'uiGmapgoogle-maps', 'pusher-angu
           $ionicUser.set('info', usuario);
           $ionicUser.save();
 
+          $ionicLoading.hide();
           $state.go('locations.usuario');
         }, function(err) {
           alert(err.message);
+          $ionicAuth.logout();
+          $ionicLoading.hide();
           $scope.backToWelcomePage();
         });
-
       }, function(err) {
           alert(err.message);
+          $ionicAuth.logout();
+          $ionicLoading.hide();
           $scope.backToWelcomePage();
       });
     };
@@ -214,42 +238,44 @@ angular.module('app', ['ionic', 'ionic.cloud', 'uiGmapgoogle-maps', 'pusher-angu
       var nombre    = $scope.registroData.nombre;
       var apellido  = $scope.registroData.apellido;
 
+      $ionicLoading.show();
+
       var user    = { 'email' : { 'email' : username }, 'clave' : password, 'nombre' : nombre, 'apellido' : apellido };
       var details = { 'email' : username, 'password' : password, 'name' : nombre + ' ' + apellido };
 
       // registrar el usuario en yuber
       UsuarioService.add(user).then(function(usuario) {
-
         // registrar el usuario en ionic
         $ionicAuth.signup(details).then(function() {
-
           // iniciar sesion en ionic
           $ionicAuth.login('basic', { 'email' : username, 'password' : password }).then( function(){
-
             // iniciar session en yuber
             UsuarioService.login({ 'usuario' : username, 'clave' : password }).then(function () {
               $ionicUser.set('info', usuario);
               $ionicUser.save();
 
               $scope.modal.hide();
+              $ionicLoading.hide();
               $state.go('locations.usuario');
             }, function(err) {
               alert(err.message);
+              $ionicAuth.logout();
+              $ionicLoading.hide();
               $scope.backToWelcomePage();
             });
-
           }, function(err) {
               alert(err.message);
+              $ionicLoading.hide();
               $scope.backToWelcomePage();
           });
-
         }, function(err) {
           alert(err.message);
+          $ionicLoading.hide();
           $scope.backToWelcomePage();
         });
-
       }, function(err) {
         alert(err.message);
+        $ionicLoading.hide();
         $scope.backToWelcomePage();
       });
     };

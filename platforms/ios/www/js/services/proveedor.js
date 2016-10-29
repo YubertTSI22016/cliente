@@ -120,21 +120,64 @@ angular.module('app')
       var getById = function(id){
           var defer = $q.defer();
 
-          defer.resolve(datos[id]);
+          $http.get(CONFIG.URL + 'vertical/obtenerproveedor/' + id)
+          .success(function (datos) {
+              defer.resolve(datos);
+          })
+          .error(function(){
+              defer.reject('server error')
+          });
 
-          // $http.get(CONFIG.URL + '/usuarios/')
-          // .success(function (datos) {
-          //     defer.resolve(datos);
-          // })
-          // .error(function(){
-          //     defer.reject('server error')
-          // });
+          return defer.promise;
+      };
+
+      var add = function(proveedor){
+          var defer = $q.defer();
+
+          $http.post(CONFIG.URL + 'vertical/altaproveedor/', proveedor)
+          .success(function (datos) {
+              defer.resolve(datos);
+          })
+          .error(function(){
+              defer.reject('server error')
+          });
+
+          return defer.promise;
+      };
+
+      var inicioJornada = function(idProveedor){
+          var defer = $q.defer();
+
+          $http.post(CONFIG.URL + 'vertical/iniciarjornadalaboral/', idProveedor)
+          .success(function (datos) {
+              defer.resolve(datos);
+          })
+          .error(function(){
+              defer.reject('server error')
+          });
+
+          return defer.promise;
+      };
+
+      var finJornada = function(idProveedor){
+          var defer = $q.defer();
+
+          $http.post(CONFIG.URL + 'vertical/finalizarjornadalaboral/', idProveedor)
+          .success(function (datos) {
+              defer.resolve(datos);
+          })
+          .error(function(){
+              defer.reject('server error')
+          });
 
           return defer.promise;
       };
 
       return {
-          getActivos  : getActivos,
-          getById     : getById
+          add           : add,
+          getById       : getById,
+          getActivos    : getActivos,
+          finJornada    : finJornada,
+          inicioJornada : inicioJornada,
       }
   }

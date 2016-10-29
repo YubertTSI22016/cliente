@@ -10,20 +10,47 @@
     </div>
 
     <ion-scroll style="height:550px">
-      <ion-list>
-        <ion-item class="item item-thumbnail-left" ng-repeat="servicio in servicios | filter:filterModel" ui-sref="locations.detalle({ id : servicio.id })">
-          <img ng-src="{{servicio.image}}">
-          <h2>{{servicio.nombre}}</h2>
-          <p>{{servicio.descripccion}}</p>
-          <span ng-class="{ 'balanced' : servicio.estado, 'assertive' : !servicio.estado }">
-            {{servicio.estado ? 'Activo' : 'En curso'}}
-          </span>
-          
-          <button class="button-clear" style="top:41px;right:10px;position:absolute;">
-            <i class="icon ion-chevron-right"></i>
-          </button>
-        </ion-item>
+    
+      <ion-list style="height: 275px;" ng-if="usuarioServicios.length">
+        <div class="card">
+          <div class="item item-divider">
+            Como usuario
+          </div>
+          <div class="item item-text-wrap">
+            <ion-item class="item" ng-repeat="servicio in usuarioServicios | filter:filterModel" ui-sref="locations.calificar({ id : servicio.id })">
+              <h3>{{servicio.descripcion}}</h3>
+              <h5>atendido por {{servicio.proveedor.nombre}}</h5>
+              <span ng-class="{ 'balanced' : servicio.estado != 'Solicitado', 'assertive' : servicio.estado == 'Solicitado' }">
+                {{servicio.estado}}
+              </span>
+              <button class="button-clear" style="top:41px;right:10px;position:absolute;">
+                <i class="icon ion-chevron-right"></i>
+              </button>
+            </ion-item>
+          </div>
+        </div>
       </ion-list>
+
+      <ion-list style="height: 275px;" ng-if="proveedorServicios.length">
+        <div class="card">
+          <div class="item item-divider">
+            Como proveedor
+          </div>
+          <div class="item item-text-wrap">
+            <ion-item class="item" ng-repeat="servicio in proveedorServicios | filter:filterModel" ui-sref="locations.serviciodetalle({ id : servicio.id })">
+              <h3>{{servicio.descripcion}}</h3>
+              <h5>creado por {{servicio.usuario.nombre}} {{servicio.usuario.apellido}}</h5>
+              <span ng-class="{ 'balanced' : servicio.estado != 'Aceptado', 'assertive' : servicio.estado == 'Aceptado' }">
+                {{servicio.estado}}
+              </span>
+              <button class="button-clear" style="top:41px;right:10px;position:absolute;">
+                <i class="icon ion-chevron-right"></i>
+              </button>
+            </ion-item>
+          </div>
+        </div>
+      </ion-list>
+
     </ion-scroll>
 
   </ion-content>

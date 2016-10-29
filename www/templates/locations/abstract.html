@@ -16,6 +16,12 @@
             <p style="text-transform: lowercase;">{{usuario.email.email}}</p>
           </ion-item>
 
+          <ion-item menu-close style="padding: 0">
+            <button class="button button-full button-balanced" ng-click="goToUsuario()">
+              Solicitar servicio
+            </button>
+          </ion-item>
+
           <ion-item ng-click="perfil()" menu-close>
             <i class="icon ion-person"></i>
             Modificar Perfil
@@ -31,14 +37,14 @@
             Servicios
           </ion-item>
 
-          <ion-item ng-click="goToUsuario()" menu-close>
-            <i class="icon ion-map"></i>
-            Solicitar servicio
-          </ion-item>
-
           <ion-item ng-click="goToProveedor()" menu-close ng-if="usuario.proveedor">
             <i class="icon ion-android-calendar"></i>
-            Empezar a trabajar
+            Brindar servicios
+          </ion-item>
+
+          <ion-item ng-click="goToGanancias()" menu-close ng-if="usuario.proveedor">
+            <i class="icon ion-cash"></i>
+            Ganancias
           </ion-item>
 
           <ion-item ng-click="serProveedor()" menu-close ng-if="!usuario.proveedor">

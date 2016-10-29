@@ -5,34 +5,40 @@
     <div class="header-slideshow-wrapper">
 
       <hgroup class="header-overlay">
-        <h5>creado por Andrulo</h5>
+        <h5>atendido por {{servicio.proveedor.nombre}}</h5>
       </hgroup>
 
     </div>
+    
+    <form ng-submit="doCalificar()">
+      <ion-scroll class="padding">
+        <p>{{servicio.descripcion}}</p>
 
-    <ion-scroll class="padding">
-      <h5 <div class="text-center" style="letter-spacing:2px;margin-top:15px;margin-bottom: 12px;">Comparti tu opinion</h5>
+        <h5 <div class="text-center" style="letter-spacing:2px;margin-top:15px;margin-bottom: 12px;">Compart&iacute; tu opinion</h5>
 
-      <div class="list">
-        <label class="item item-input item-stacked-label">
-          <span class="input-label">Comentario</span>
-          <textarea placeholder="Agregar un comentario" ng-model="review.valor"></textarea>
-        </label>
+        <div class="list">
+          <div class="item item-divider">
+            Comentario
+          </div>
 
-        <div class="item item-divider">
-          Calificacion
+          <label class="item item-input">
+            <textarea placeholder="Agregar un comentario" ng-model="reviewData.comentario" ng-if="!servicio.comentario" style="height: 69px"></textarea>
+            <p ng-if="servicio.comentario">{{servicio.comentario}}</p>
+          </label>
+
+          <div class="item item-divider">
+            Calificaci&oacute;n
+          </div>
+
+          <div class="item item-input">
+            <rating ng-model="reviewData.calificacion" max="5" readonly="servicio.rating"></rating>
+          </div>
+
+          <button class="button button-block button-balanced" type="submit" ng-if="!servicio.rating">Calificar</button>
         </div>
 
-        <div class="item range range-positive">
-          <i class="icon ion-sad-outline"></i>
-          <input type="range" name="volume" min="0" max="100" value="50" ng-model="review.comentario">
-          <i class="icon ion-happy"></i>
-        </div>
-
-        <button class="button button-block button-balanced" ng-click="calificar()">Calificar</button>
-      </div>
-
-    </ion-scroll>
+      </ion-scroll>
+    </form>
 
   </ion-content>
 

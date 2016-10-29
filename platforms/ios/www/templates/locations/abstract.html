@@ -11,9 +11,20 @@
       <ion-content ng-controller="PerfilCtrl">
         <ion-list>
           <ion-item class="item item-avatar">
-            <img ng-src="{{usuario.image}}">
-            <h2>{{usuario.name}}</h2>
-            <p>Back off, man. I'm a scientist.</p>
+            <img ng-src="{{usuario.imagen}}">
+            <h2>{{usuario.nombre}} {{usuario.apellido}}</h2>
+            <p style="text-transform: lowercase;">{{usuario.email.email}}</p>
+          </ion-item>
+
+          <ion-item menu-close style="padding: 0">
+            <button class="button button-full button-balanced" ng-click="goToUsuario()">
+              Solicitar servicio
+            </button>
+          </ion-item>
+
+          <ion-item ng-click="perfil()" menu-close>
+            <i class="icon ion-person"></i>
+            Modificar Perfil
           </ion-item>
 
           <ion-item ng-click="goToPagos()" menu-close>
@@ -26,19 +37,14 @@
             Servicios
           </ion-item>
 
-          <ion-item ng-click="goToUsuario()" menu-close>
-            <i class="icon ion-map"></i>
-            Solicitar servicio
-          </ion-item>
-
-          <ion-item ng-click="goToProveedor()" menu-close>
+          <ion-item ng-click="goToProveedor()" menu-close ng-if="usuario.proveedor">
             <i class="icon ion-android-calendar"></i>
-            Empezar a trabajar
+            Brindar servicios
           </ion-item>
 
-          <ion-item ng-click="serProveedor()" menu-close>
-            <i class="icon ion-person-add"></i>
-            Ser Proveedor
+          <ion-item ng-click="serProveedor()" menu-close ng-if="!usuario.proveedor">
+            <i class="icon ion-person-stalker"></i>
+            Trabajar con nosotros
           </ion-item>
 
           <ion-item menu-close ng-click="logout()">

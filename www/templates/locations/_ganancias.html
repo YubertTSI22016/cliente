@@ -1,0 +1,53 @@
+<ion-view view-title="Ganancias" class="project-detail" hide-back-button="true">
+
+  <ion-content class="has-header" scroll="false" >
+
+    <div class="ganancia-scroller">
+      
+        <ion-list class="list-scroll">
+          <ion-item class="item">
+            <div class="row text-center">
+              <div class="col">Total</div>
+              <div class="col">Comisi&oacute;n</div>
+              <div class="col">Ganancia</div>
+            </div>
+          </ion-item>
+
+          <ion-scroll>
+            <ion-item class="item item-scroll" ng-repeat="ganancia in ganancias" >
+              <div class="row text-center">
+                <div class="col">${{ganancia.total}}</div>
+                <div class="col">${{ganancia.comision}}</div>
+                <div class="col">${{ganancia.ganancia}}</div>
+              </div>
+            </ion-item>
+          </ion-scroll>
+
+        <ion-list>
+      
+    </div>
+
+    <div class="ganancia-fixed">
+      <ion-list>
+          <ion-item class="item">
+            <div class="row text-center">
+              <div class="col">$300</div>
+              <div class="col">$100</div>
+              <div class="col">$200</div>
+            </div>
+          </ion-item>
+
+          <ion-item class="item text-center">
+            <h5>Usted tiene para cobrar </h5>
+            <h1>$200</h1>
+            <button class="button button-energized button-block" ng-click="doCobrar()"> Cobrar </button>
+          </ion-item>
+
+        <ion-list>
+      </ion-scroll>
+    </div>
+      
+
+  </ion-content>
+
+</ion-view>
