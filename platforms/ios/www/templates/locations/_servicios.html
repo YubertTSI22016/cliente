@@ -10,43 +10,47 @@
     </div>
 
     <ion-scroll style="height:550px">
-      <ion-list style="height: 275px;">
+    
+      <ion-list style="height: 275px;" ng-if="usuarioServicios.length">
         <div class="card">
-        <div class="item item-divider">
-          Como usuario
+          <div class="item item-divider">
+            Como usuario
+          </div>
+          <div class="item item-text-wrap">
+            <ion-item class="item" ng-repeat="servicio in usuarioServicios | filter:filterModel" ui-sref="locations.calificar({ id : servicio.id })">
+              <h3>{{servicio.descripcion}}</h3>
+              <h4 ng-class="{ 'balanced' : servicio.estado == 'Finalizado', 'calm' : servicio.estado == 'Aceptado' || servicio.estado == 'Iniciado', 'assertive' : servicio.estado == 'Solicitado' }">
+                {{servicio.estado}}
+              </h4>
+              <h5 ng-if="servicio.proveedor.nombre">atendido por {{servicio.proveedor.nombre}}</h5>
+              <button class="button-clear" style="top:41px;right:10px;position:absolute;">
+                <i class="icon ion-chevron-right"></i>
+              </button>
+            </ion-item>
+          </div>
         </div>
-        <div class="item item-text-wrap">
-          <ion-item class="item" ng-repeat="servicio in servicios | filter:filterModel" ui-sref="locations.serviciodetalle({ id : servicio.id })">
-            <h3>{{servicio.nombre}}</h3>
-            <span ng-class="{ 'balanced' : servicio.estado, 'assertive' : !servicio.estado }">
-              {{servicio.estado ? 'Activo' : 'En curso'}}
-            </span>
-            <button class="button-clear" style="top:41px;right:10px;position:absolute;">
-              <i class="icon ion-chevron-right"></i>
-            </button>
-          </ion-item>
-        </div>
-      </div>
       </ion-list>
 
-      <ion-list style="height: 275px;">
+      <ion-list style="height: 275px;" ng-if="proveedorServicios.length">
         <div class="card">
-        <div class="item item-divider">
-          Como proveedor
+          <div class="item item-divider">
+            Como proveedor
+          </div>
+          <div class="item item-text-wrap">
+            <ion-item class="item" ng-repeat="servicio in proveedorServicios | filter:filterModel" ui-sref="locations.serviciodetalle({ id : servicio.id })">
+              <h3>{{servicio.descripcion}}</h3>
+              <h4 ng-class="{ 'balanced' : servicio.estado == 'Finalizado', 'calm' : servicio.estado == 'Iniciado', 'assertive' : servicio.estado == 'Aceptado' }">
+                {{servicio.estado}}
+              </h4>
+              <h5>creado por {{servicio.usuario.nombre}} {{servicio.usuario.apellido}}</h5>
+              <button class="button-clear" style="top:41px;right:10px;position:absolute;">
+                <i class="icon ion-chevron-right"></i>
+              </button>
+            </ion-item>
+          </div>
         </div>
-        <div class="item item-text-wrap">
-          <ion-item class="item" ng-repeat="servicio in servicios | filter:filterModel" ui-sref="locations.serviciodetalle({ id : servicio.id })">
-            <h3>{{servicio.nombre}}</h3>
-            <span ng-class="{ 'balanced' : servicio.estado, 'assertive' : !servicio.estado }">
-              {{servicio.estado ? 'Activo' : 'En curso'}}
-            </span>
-            <button class="button-clear" style="top:41px;right:10px;position:absolute;">
-              <i class="icon ion-chevron-right"></i>
-            </button>
-          </ion-item>
-        </div>
-      </div>
       </ion-list>
+
     </ion-scroll>
 
   </ion-content>

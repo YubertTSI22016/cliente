@@ -58,6 +58,34 @@ angular.module('app')
           return defer.promise;
       };
 
+      var iniciar = function(servicio){
+          var defer = $q.defer();
+
+          $http.post(CONFIG.URL + 'vertical/iniciarservicio/', servicio)
+          .success(function (datos) {
+              defer.resolve(datos);
+          })
+          .error(function(){
+              defer.reject('server error')
+          });
+
+          return defer.promise;
+      };
+
+      var cancelar = function(servicio){
+          var defer = $q.defer();
+
+          $http.post(CONFIG.URL + 'vertical/cancelarservicio/', servicio)
+          .success(function (datos) {
+              defer.resolve(datos);
+          })
+          .error(function(){
+              defer.reject('server error')
+          });
+
+          return defer.promise;
+      };
+
       var finalizar = function(servicio){
           var defer = $q.defer();
 
@@ -90,6 +118,8 @@ angular.module('app')
           pedir         : pedir,
           ofrecer       : ofrecer,
           getById       : getById,
+          iniciar       : iniciar,
+          cancelar      : cancelar,
           finalizar     : finalizar,
           calificar     : calificar,
           getServicios  : getServicios,

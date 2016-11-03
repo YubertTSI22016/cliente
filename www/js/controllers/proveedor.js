@@ -21,8 +21,8 @@ angular.module('app')
         $scope.activo = true;
 
         PusherService.proveedoresChannel.bind('solicitud-recibida',
-          function(servicio) {
-            mostrarServicio(servicio);
+          function(data) {
+            mostrarServicio(data.message);
           }
         );
       }
@@ -84,7 +84,7 @@ angular.module('app')
     };
 
     var mostrarServicio = function(servicio){
-      $ionicPopup.show({
+      var alertPopup = $ionicPopup.show({
         title     : 'Usuario solicitando un servicio',
         template  : 'Si desea tomar el servicio acepte el pedido',
         buttons   : [{
@@ -106,6 +106,12 @@ angular.module('app')
           }
         }]
       });
+
+      PusherService.proveedoresChannel.bind('solicitud-cancelada', 
+        function(data) {
+          alertPopup.close();
+        }
+      );
     }
 
     $scope.centerOnMe = function () {
@@ -127,8 +133,8 @@ angular.module('app')
       ProveedorService.inicioJornada({ idProveedor : proveedor.id }).then(function (response) {
         $scope.activo = true;
         PusherService.proveedoresChannel.bind('solicitud-recibida',
-          function(servicio) {
-            mostrarServicio(servicio);
+          function(data) {
+            mostrarServicio(data.message);
           }
         );
       }, function(err) {

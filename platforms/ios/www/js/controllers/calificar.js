@@ -7,12 +7,15 @@ angular.module('app')
 
     var usuario = $ionicUser.get('info');
     $scope.reviewData = {
-      calificacion : '50'
+      calificacion : 0
     }
     $ionicLoading.show();
 
     ServicioService.getById($stateParams.id).then(function(data){
-      $scope.servicio = data;
+      $scope.servicio   = data;
+      $scope.reviewData = {
+        calificacion : data.rating
+      }
       $ionicLoading.hide();
     });
 
@@ -21,6 +24,7 @@ angular.module('app')
       var servicio  = this.servicio;
 
       review['idServicio'] = servicio.id;
+      review['calificacion'] += '';
 
       ServicioService.calificar(review).then(function(data){
         $state.go('locations.usuario');

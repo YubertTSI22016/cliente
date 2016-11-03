@@ -1,6 +1,10 @@
 angular.module('app')
 
   .controller('PerfilCtrl', function ($scope, $state, $ionicAuth, $ionicUser, $ionicModal, UsuarioService, ProveedorService) {
+    if (!$ionicAuth.isAuthenticated()) {
+      $state.go('welcome');
+    }
+    
     $scope.usuario = $ionicUser.get('info');
     if ($ionicUser.social.facebook) {
       $scope.usuario['imagen'] = $ionicUser.social.facebook.data.profile_picture;

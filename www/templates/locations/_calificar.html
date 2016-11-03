@@ -1,6 +1,6 @@
-<ion-view view-title="Calificar" class="project-detail" hide-back-button="true">
+<ion-view view-title="Detalle del servicio" class="project-detail" hide-back-button="true">
 
-  <ion-content class="has-header">
+  <ion-content class="has-header" style="top:0;">
 
     <div class="header-slideshow-wrapper">
 
@@ -10,35 +10,45 @@
 
     </div>
     
-    <form ng-submit="doCalificar()">
-      <ion-scroll class="padding">
-        <p>{{servicio.descripcion}}</p>
-
+    <div class="list padding">
+      <h4 class="text-center"><span class="positive">{{servicio.estado}}</span></h4>
+      <p>{{servicio.descripcion}}</p>
+      <div class="item item-divider">
+          Datos del proveedor
+      </div>
+      <a class="item item-icon-left" ng-href="mailto:{{servicio.proveedor.usuario.email.email}}">
+        <i class="icon ion-email"></i>
+        {{servicio.proveedor.usuario.email.email}}
+      </a>
+      <a class="item item-icon-left" ng-href="tel:{{servicio.proveedor.telefono.telefono}}">
+        <i class="icon ion-ios-telephone"></i>
+        {{servicio.proveedor.telefono.telefono || 'No tiene'}}
+      </a>
+      
+      <div ng-if="servicio.estado == 'Finalizado'">
         <h5 <div class="text-center" style="letter-spacing:2px;margin-top:15px;margin-bottom: 12px;">Compart&iacute; tu opinion</h5>
 
-        <div class="list">
-          <div class="item item-divider">
-            Comentario
-          </div>
-
-          <label class="item item-input">
-            <textarea placeholder="Agregar un comentario" ng-model="reviewData.comentario" ng-if="!servicio.comentario" style="height: 69px"></textarea>
-            <p ng-if="servicio.comentario">{{servicio.comentario}}</p>
-          </label>
-
-          <div class="item item-divider">
-            Calificaci&oacute;n
-          </div>
-
-          <div class="item item-input">
-            <rating ng-model="reviewData.calificacion" max="5" readonly="servicio.rating"></rating>
-          </div>
-
-          <button class="button button-block button-balanced" type="submit" ng-if="!servicio.rating">Calificar</button>
+        <div class="item item-divider">
+          Comentario
         </div>
 
-      </ion-scroll>
-    </form>
+        <label class="item item-input">
+          <textarea placeholder="Agregar un comentario" ng-model="reviewData.comentario" ng-if="!servicio.comentario" style="height: 69px"></textarea>
+          <p ng-if="servicio.comentario">{{servicio.comentario}}</p>
+        </label>
+
+        <div class="item item-divider">
+          Calificaci&oacute;n
+        </div>
+
+        <div class="item item-input">
+          <rating ng-model="reviewData.calificacion" max="5" readonly="servicio.rating"></rating>
+        </div>
+
+        <button class="button button-block button-balanced" type="submit" ng-if="!servicio.rating" ng-click="doCalificar()">Calificar</button>
+      </div>
+
+    </div>
 
   </ion-content>
 

@@ -19,6 +19,12 @@ angular.module('app')
       var jornadaActual = proveedor.jornadaActual;
       if(jornadaActual && jornadaActual.inicio && !jornadaActual.fin){
         $scope.activo = true;
+
+        PusherService.proveedoresChannel.bind('solicitud-recibida',
+          function(data) {
+            mostrarServicio(data.message);
+          }
+        );
       }
 
     }, function(err) {
@@ -60,7 +66,7 @@ angular.module('app')
         $scope.markers.push({
           id          : 'proveedor',
           title       : 'yo mismo',
-          options     : { icon : image, draggable: true, animation: google.maps.Animation.DROP },
+          options     : { icon : image, draggable : true, animation : google.maps.Animation.DROP },
           coords      : {
             latitude  : pos.coords.latitude,
             longitude : pos.coords.longitude
@@ -77,8 +83,8 @@ angular.module('app')
       }
     };
 
-    var mostrarServicio = function(data){
-      $ionicPopup.show({
+    var mostrarServicio = function(servicio){
+      var alertPopup = $ionicPopup.show({
         title     : 'Usuario solicitando un servicio',
         template  : 'Si desea tomar el servicio acepte el pedido',
         buttons   : [{
@@ -88,11 +94,11 @@ angular.module('app')
           text  : '<b>Aceptar</b>',
           type  : 'button-energized',
           onTap : function(e) {
-            var servicio = {
-              idServicio  : data.idServicio,
+            var servicioData = {
+              idServicio  : servicio.id,
               idProveedor : proveedor.id 
             }
-            ServicioService.ofrecer(servicio).then(function (response) {
+            ServicioService.ofrecer(servicioData).then(function (response) {
               $state.go('locations.serviciodetalle', { id : response.id });
             }, function(err) {
               alert(err.message);
@@ -100,6 +106,12 @@ angular.module('app')
           }
         }]
       });
+
+      PusherService.proveedoresChannel.bind('solicitud-cancelada', 
+        function(data) {
+          alertPopup.close();
+        }
+      );
     }
 
     $scope.centerOnMe = function () {
@@ -120,6 +132,11 @@ angular.module('app')
     $scope.comenzar = function(){
       ProveedorService.inicioJornada({ idProveedor : proveedor.id }).then(function (response) {
         $scope.activo = true;
+        PusherService.proveedoresChannel.bind('solicitud-recibida',
+          function(data) {
+            mostrarServicio(data.message);
+          }
+        );
       }, function(err) {
         alert(err.message);
       });
@@ -128,18 +145,11 @@ angular.module('app')
     $scope.finalizar = function(){
       ProveedorService.finJornada({ idProveedor : proveedor.id }).then(function (response) {
         $scope.activo = false;
+        PusherService.unbindAll();
       }, function(err) {
         alert(err.message);
       });
     }
-
-    PusherService.proveedoresChannel.bind('solicitud-recibida',
-      function(data) {
-        if ($scope.activo) {
-          mostrarServicio(data);
-        }
-      }
-    );
 
     uiGmapIsReady.promise(3).then(function(instances) {
       var map = instances[2].map;

@@ -1,6 +1,6 @@
 angular.module('app')
 
-  .controller('UsuarioCtrl', function ($scope, $ionicAuth, $ionicUser, ProveedorService, $ionicLoading, $state, $ionicSideMenuDelegate, uiGmapGoogleMapApi, uiGmapIsReady, $ionicPopup, PusherService, ServicioService) {
+  .controller('UsuarioCtrl', function ($scope, $ionicAuth, $ionicUser, $ionicLoading, $state, $ionicSideMenuDelegate, $ionicPopup, uiGmapGoogleMapApi, uiGmapIsReady, PusherService, ServicioService, ProveedorService) {
     if (!$ionicAuth.isAuthenticated()) {
       $state.go('welcome');
     }
@@ -107,9 +107,10 @@ angular.module('app')
 
     var pedir = function (descripcion, marker) {
       var data = { 
-        idUsuario       : usuario.id, 
-        ubicacion       : marker['coords']['latitude'] + ',' +  marker['coords']['longitude'],
-        destinoOMensaje : descripcion
+        idUsuario   : usuario.id, 
+        ubicacion   : marker['coords']['latitude'] + ',' +  marker['coords']['longitude'],
+        destino     : '',
+        descripcion : descripcion
       };
 
       ServicioService.pedir(data).then(function (response) {
@@ -121,13 +122,28 @@ angular.module('app')
         });
 
         alertPopup.then(function(res) {
-          console.log('cancelar servicio');
+          $ionicLoading.show();
+
+          if(res){
+            var servicioData = {
+              idServicio : response.id,
+            }
+
+            ServicioService.cancelar(servicioData).then(function (response) {
+              $scope.servicio = response;
+              $ionicLoading.hide();
+            }, function(err) {
+              alert(err.message);
+              $ionicLoading.hide();
+            });  
+          }
         });
 
         PusherService.usuarioChannel.bind('solicitud-aceptada', 
           function(data) {
+            var servicio = data.message;
             alertPopup.close();
-            $state.go('locations.calificar', { id : data.id });
+            $state.go('locations.calificar', { id : servicio.id });
           }
         );
       }, function(err) {

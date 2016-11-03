@@ -1,4 +1,4 @@
-<ion-view view-title="{{servicio.nombre}}" class="project-detail">
+<ion-view view-title="Detalle del servicio" class="project-detail">
 
   <ion-nav-bar class="bar bar-dark bar-special">
 
@@ -6,7 +6,7 @@
 
   </ion-nav-bar>
 
-  <ion-content class="has-header">
+  <ion-content class="has-header" style="top:0;">
 
     <div class="header-slideshow-wrapper">
 
@@ -16,21 +16,34 @@
 
     </div>
 
-    <ion-scroll class="padding" style="height: 448px">
-      <h6 class="text-center">{{servicio.estado}}</h6>
+    <div class="list padding">
+      <h4 class="text-center"><span class="positive">{{servicio.estado}}</span></h4>
       <p>{{servicio.descripcion}}</p>
-      <div class="list">
-        <a class="item item-icon-left" ng-href="mailto:{{servicio.usuario.email.email}}">
-          <i class="icon ion-email"></i>
-          {{servicio.usuario.email.email}}
-        </a>
-        <a class="item item-icon-left" ng-href="tel:{{servicio.usuario.telefonoContacto.telefono}}">
-          <i class="icon ion-ios-telephone"></i>
-          {{servicio.usuario.telefonoContacto.telefono || 'No tiene'}}
-        </a>
+      <div class="item item-divider">
+        Datos del usuario
       </div>
-      <button class="button button-full button-balanced" ng-click="finalizar()" ng-if="servicio.estado != 'Finalizado'">Finalizar servicio</button>
-    </ion-scroll>
+      <a class="item item-icon-left" ng-href="mailto:{{servicio.usuario.email.email}}">
+        <i class="icon ion-email"></i>
+        {{servicio.usuario.email.email}}
+      </a>
+      <a class="item item-icon-left" ng-href="tel:{{servicio.usuario.telefonoContacto.telefono}}">
+        <i class="icon ion-ios-telephone"></i>
+        {{servicio.usuario.telefonoContacto.telefono || 'No tiene'}}
+      </a>
+
+      <button class="button button-full button-balanced" ng-click="iniciar()" ng-if="servicio.estado == 'Aceptado'">Iniciar servicio</button>
+      
+      <div ng-if="servicio.estado == 'Iniciado'">
+        <div class="item item-divider">
+          Calificaci&oacute;n
+        </div>
+        <div class="item item-input">
+          <rating ng-model="reviewData.calificacion" max="5" readonly="servicio.usuario.rating"></rating>
+        </div>
+        <button class="button button-full button-assertive" ng-click="finalizar()" ng-if="servicio.estado == 'Iniciado'">Finalizar servicio</button>
+      </div>
+      
+    </div>
 
   </ion-content>
 

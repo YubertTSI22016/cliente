@@ -11,12 +11,15 @@ angular.module('app')
     $scope.usuarioServicios   = null;
     $scope.proveedorServicios = null;
 
+    $scope.reviewData = {
+      calificacion : 0
+    }
+
     var id = $stateParams && $stateParams['id'] ? $stateParams['id'] : null;
 
     if(id){
       ServicioService.getById(id).then(function(data){
         $scope.servicio = data;
-        $ionicLoading.hide();
       });
     }else{
       ServicioService.getServicios(usuario.id).then(function(data){
@@ -30,18 +33,40 @@ angular.module('app')
       }
     }
 
-    $scope.finalizar = function(){
+    $scope.iniciar = function(){
+      $ionicLoading.show();
       var servicio = this.servicio;
 
       var servicioData = {
         idServicio : servicio.id,
-        precio : '23'
+      }
+
+      ServicioService.iniciar(servicioData).then(function (response) {
+        $scope.servicio = response;
+        $ionicLoading.hide();
+      }, function(err) {
+        alert(err.message);
+        $ionicLoading.hide();
+      });
+    }
+
+    $scope.finalizar = function(){
+      $ionicLoading.show();
+      var servicio  = this.servicio;
+      var review    = this.reviewData;
+
+      var servicioData = {
+        idServicio : servicio.id,
+        precio : '20',
+        calificacionUsuario: review.calificacion + ''
       }
 
       ServicioService.finalizar(servicioData).then(function (response) {
         $state.go('locations.proveedor');
+        $ionicLoading.hide();
       }, function(err) {
         alert(err.message);
+        $ionicLoading.hide();
       });
     }
 

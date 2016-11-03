@@ -1,12 +1,15 @@
 angular.module('app')
 
-  .controller('UsuarioCtrl', function ($scope, $ionicAuth, $ionicUser, ProveedorService, $ionicLoading, $state, $ionicSideMenuDelegate, uiGmapGoogleMapApi, uiGmapIsReady, $ionicPopup, PusherService, ServicioService) {
+  .controller('UsuarioCtrl', function ($scope, $ionicAuth, $ionicUser, $ionicLoading, $state, $ionicSideMenuDelegate, $ionicPopup, uiGmapGoogleMapApi, uiGmapIsReady, PusherService, ServicioService, ProveedorService) {
     if (!$ionicAuth.isAuthenticated()) {
       $state.go('welcome');
     }
 
-    var usuario = $ionicUser.get('info');
+    var usuario     = $ionicUser.get('info');
     $scope.markers  = [];
+    $scope.data     = {
+      comentario : ''
+    };
 
     PusherService.unbindAll();
 
@@ -102,16 +105,12 @@ angular.module('app')
       });
     };
 
-    $scope.solicitar = function () {
-      var marker = _.find($scope.markers, ['id', 'usuario']);
-      if (!marker) {
-        return;
-      }
-
+    var pedir = function (descripcion, marker) {
       var data = { 
-        idUsuario       : usuario.id, 
-        ubicacion       : marker['coords']['latitude'] + ',' +  marker['coords']['longitude'],
-        destinoOMensaje : ''
+        idUsuario   : usuario.id, 
+        ubicacion   : marker['coords']['latitude'] + ',' +  marker['coords']['longitude'],
+        destino     : '',
+        descripcion : descripcion
       };
 
       ServicioService.pedir(data).then(function (response) {
@@ -123,17 +122,56 @@ angular.module('app')
         });
 
         alertPopup.then(function(res) {
-          console.log('cancelar servicio');
+          $ionicLoading.show();
+
+          if(res){
+            var servicioData = {
+              idServicio : response.id,
+            }
+
+            ServicioService.cancelar(servicioData).then(function (response) {
+              $scope.servicio = response;
+              $ionicLoading.hide();
+            }, function(err) {
+              alert(err.message);
+              $ionicLoading.hide();
+            });  
+          }
         });
 
         PusherService.usuarioChannel.bind('solicitud-aceptada', 
           function(data) {
+            var servicio = data.message;
             alertPopup.close();
-            $state.go('locations.calificar', { id : data.id });
+            $state.go('locations.calificar', { id : servicio.id });
           }
         );
       }, function(err) {
         alert(err.message);
+      });
+    };
+
+    $scope.solicitar = function(){
+      var marker = _.find($scope.markers, ['id', 'usuario']);
+      if (!marker) {
+        return;
+      }
+
+      $ionicPopup.show({
+        title     : 'Solicitando servicio',
+        subTitle  : 'Ingrese un comentario',
+        template  : '<textarea ng-model="data.comentario" style="height: 69px;"></textarea>',
+        scope     : $scope,
+        buttons   : [{
+          text  : 'Cancelar',
+          type  : 'button-light'
+        }, {
+          text  : '<b>Aceptar</b>',
+          type  : 'button-energized',
+          onTap : function(e) {
+            pedir($scope.data.comentario, marker);
+          }
+        }]
       });
     };
 

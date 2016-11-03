@@ -19,10 +19,10 @@
           <div class="item item-text-wrap">
             <ion-item class="item" ng-repeat="servicio in usuarioServicios | filter:filterModel" ui-sref="locations.calificar({ id : servicio.id })">
               <h3>{{servicio.descripcion}}</h3>
-              <h5>atendido por {{servicio.proveedor.nombre}}</h5>
-              <span ng-class="{ 'balanced' : servicio.estado != 'Solicitado', 'assertive' : servicio.estado == 'Solicitado' }">
+              <h4 ng-class="{ 'balanced' : servicio.estado == 'Finalizado', 'calm' : servicio.estado == 'Aceptado' || servicio.estado == 'Iniciado', 'assertive' : servicio.estado == 'Solicitado' }">
                 {{servicio.estado}}
-              </span>
+              </h4>
+              <h5 ng-if="servicio.proveedor.nombre">atendido por {{servicio.proveedor.nombre}}</h5>
               <button class="button-clear" style="top:41px;right:10px;position:absolute;">
                 <i class="icon ion-chevron-right"></i>
               </button>
@@ -39,10 +39,10 @@
           <div class="item item-text-wrap">
             <ion-item class="item" ng-repeat="servicio in proveedorServicios | filter:filterModel" ui-sref="locations.serviciodetalle({ id : servicio.id })">
               <h3>{{servicio.descripcion}}</h3>
-              <h5>creado por {{servicio.usuario.nombre}} {{servicio.usuario.apellido}}</h5>
-              <span ng-class="{ 'balanced' : servicio.estado != 'Aceptado', 'assertive' : servicio.estado == 'Aceptado' }">
+              <h4 ng-class="{ 'balanced' : servicio.estado == 'Finalizado', 'calm' : servicio.estado == 'Iniciado', 'assertive' : servicio.estado == 'Aceptado' }">
                 {{servicio.estado}}
-              </span>
+              </h4>
+              <h5>creado por {{servicio.usuario.nombre}} {{servicio.usuario.apellido}}</h5>
               <button class="button-clear" style="top:41px;right:10px;position:absolute;">
                 <i class="icon ion-chevron-right"></i>
               </button>

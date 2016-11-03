@@ -1,15 +1,6 @@
 angular.module('app', ['ionic', 'ionic.cloud', 'ionic.rating', 'uiGmapgoogle-maps', 'pusher-angular'])
 
-.constant('CONFIG', {
-  'IONIC_ID'        : '324566f8',
-  'URL'             : '/yuberapi/rest/',
-  // 'URL'             : 'http://10.0.22.195:8080/yuberapi/rest/',
-  'TENANT_ID'       : 'b378b367-b024-4168-86dc-fdf0c21ee200',
-  'TENANT'          : 'tenant',
-  'FACEBOOK'        : true,
-  'PUSHER_KEY'      : 'c2f52caa39102181e99f',
-  'NOMBRE_EMPRESA'  : 'YUBER'
-})
+
 
 .run(function($ionicPlatform, $rootScope, CONFIG) {
   $ionicPlatform.ready(function() {
@@ -22,9 +13,13 @@ angular.module('app', ['ionic', 'ionic.cloud', 'ionic.rating', 'uiGmapgoogle-map
   });
 
   $rootScope.CONFIG = CONFIG;
+
+  Stripe.setPublishableKey(CONFIG.STRIPE_KEY);
+
+  
 })
 
-.config(function($stateProvider, $urlRouterProvider, $ionicCloudProvider, uiGmapGoogleMapApiProvider, CONFIG, $httpProvider) {
+.config(function($stateProvider, $urlRouterProvider, $ionicCloudProvider, $ionicConfigProvider, uiGmapGoogleMapApiProvider, CONFIG, $httpProvider) {
   $httpProvider.defaults.headers.common['yuber-tenant'] = CONFIG.TENANT_ID;
 
   $ionicCloudProvider.init({
@@ -32,6 +27,10 @@ angular.module('app', ['ionic', 'ionic.cloud', 'ionic.rating', 'uiGmapgoogle-map
       'app_id' : CONFIG.IONIC_ID
     }
   });
+
+  console.log(ionic);
+
+
 
   uiGmapGoogleMapApiProvider.configure({
       key: 'AIzaSyB16sGmIekuGIvYOfNoW9T44377IU2d2Es',
@@ -135,7 +134,9 @@ angular.module('app', ['ionic', 'ionic.cloud', 'ionic.rating', 'uiGmapgoogle-map
     });
 })
 
-.controller('WelcomeCtrl', function ($scope, CONFIG, $ionicModal, $state, $ionicPopup, $window, $ionicAuth, $ionicUser, $ionicLoading, UsuarioService) {
+.controller('WelcomeCtrl', function ($scope, CONFIG, $ionicModal, $state, $ionicPopup, $window, $ionicAuth, $ionicUser, $ionicLoading, UsuarioService, PusherService) {
+    PusherService.unbindAll();
+    
     $scope.loginData    = {
       username : 'user@user.com',
       password : 'user',
@@ -185,7 +186,8 @@ angular.module('app', ['ionic', 'ionic.cloud', 'ionic.rating', 'uiGmapgoogle-map
       $ionicAuth.login('basic', details).then( function(){
         UsuarioService.login(user).then(function (usuario) {
           $ionicUser.set('info', usuario);
-
+          $ionicUser.save();
+          
           $scope.modal.hide();
           $ionicLoading.hide();
           $state.go('locations.usuario');

@@ -1,4 +1,4 @@
-<ion-view view-title="Pagos" class="project-detail" hide-back-button="true">
+<ion-view view-title="Pago" class="project-detail" hide-back-button="true">
 
   <ion-content>
 
@@ -6,15 +6,14 @@
       <div class="list">
         <div class="card">
           <div class="item item-divider">
-            Pago de usuario
+            Informaci&oacute;n de usuario
           </div>
           <div class="item item-text-wrap">
             <div class="list">
-              <ion-item class="item" ng-repeat="ut in usuarioTarjetas">
-                <h2>{{ut.nombre}}</h2>
-                <p>{{ut.descripccion}}</p>
+              <ion-item class="item" ng-if="usuario.ultimosNumerosTarjeta">
+                <h2>&#8226;&#8226;&#8226;&#8226; {{usuario.ultimosNumerosTarjeta}}</h2>
               </ion-item>
-              <ion-item class="item" ng-if="!usuarioTarjetas">
+              <ion-item class="item" ng-if="!usuario.ultimosNumerosTarjeta">
                 <label class="item item-input">
                   <input type="text" ng-model="pago.numero" placeholder="Numero de tarjeta">
                 </label>
@@ -23,6 +22,8 @@
                 </label>
                 <label class="item item-input">
                   <input class="col" ng-model="pago.mm" type="text" placeholder="MM">
+                </label>
+                <label class="item item-input">
                   <input class="col" ng-model="pago.yy" type="text" placeholder="AA">
                 </label>
                 <div class="padding-left padding-right">
@@ -35,19 +36,18 @@
       </div>
     </form>
 
-    <form ng-submit="doPagoProveedor()">
+    <form ng-submit="doPagoProveedor()" ng-if="usuario.proveedor">
       <div class="list">
         <div class="card">
           <div class="item item-divider">
-            Pago de proveedor
+            Informaci&oacute;n de proveedor
           </div>
           <div class="item item-text-wrap">
             <div class="list">
-              <ion-item class="item" ng-repeat="pt in proveedorTarjetas">
-                <h2>{{pt.nombre}}</h2>
-                <p>{{pt.descripccion}}</p>
+              <ion-item class="item" ng-if="usuario.proveedor.ultimosNumerosTarjeta">
+                <h2>&#8226;&#8226;&#8226;&#8226; {{usuario.proveedor.ultimosNumerosTarjeta}}</h2>
               </ion-item>
-              <ion-item class="item" ng-if="!proveedorTarjetas">
+              <ion-item class="item" ng-if="!usuario.proveedor.ultimosNumerosTarjeta">
                 <label class="item item-input">
                   <input type="text" ng-model="pagoProveedor.numero" placeholder="Numero de tarjeta">
                 </label>
@@ -56,6 +56,8 @@
                 </label>
                 <label class="item item-input">
                   <input class="col" ng-model="pagoProveedor.mm" type="text" placeholder="MM">
+                </label>
+                <label class="item item-input">
                   <input class="col" ng-model="pagoProveedor.yy" type="text" placeholder="AA">
                 </label>
                 <div class="padding-left padding-right">

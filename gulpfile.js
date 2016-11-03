@@ -6,6 +6,8 @@ var sass = require('gulp-sass');
 var minifyCss = require('gulp-minify-css');
 var rename = require('gulp-rename');
 var sh = require('shelljs');
+var replace = require('gulp-replace');
+var prompt = require('gulp-prompt');
 
 var paths = {
   sass: ['./scss/**/*.scss']
@@ -49,4 +51,19 @@ gulp.task('git-check', function(done) {
     process.exit(1);
   }
   done();
+});
+
+gulp.task('templates', function(){
+
+  gulp.src('./www/js/config.js')
+    .pipe(prompt.prompt([{
+        type: 'input',
+        name: 'NOMBRE_EMPRESA',
+        message: 'NOMBRE_EMPRESA?'
+    }], function(res){
+        gulp.src('./www/js/config.js')
+          .pipe(replace('NOMBRE_EMPRESA', res.NOMBRE_EMPRESA));
+    }));
+
+  
 });

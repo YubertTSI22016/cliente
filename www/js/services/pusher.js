@@ -1,17 +1,21 @@
 angular.module('app')
-  .service('PusherService', ['$pusher', 'CONFIG', pusherService]);
+  .service('PusherService', ['$pusher', 'CONFIG', '$ionicUser', pusherService]);
 
-  function pusherService($pusher, CONFIG) {
+  function pusherService($pusher, CONFIG, $ionicUser) {
     var client  = new Pusher(CONFIG.PUSHER_KEY, {
-      encrypted: true
+      encrypted : true
     });
     var pusher  = $pusher(client);
 
-    var usuarioChannel      = pusher.subscribe(CONFIG.TENANT + '-usuario');
-    var proveedoresChannel  = pusher.subscribe(CONFIG.TENANT + '-proveedores');
+    var usuario = $ionicUser.get('info') || {};
+
+    var usuarioChannel      = usuario ? pusher.subscribe(CONFIG.TENANT_ID + '-usuario-' + usuario.id) : null;
+    var proveedoresChannel  = pusher.subscribe(CONFIG.TENANT_ID + '-proveedores');
 
     var unbindAll = function(){
-      usuarioChannel.unbind();
+      if(usuarioChannel){
+        usuarioChannel.unbind();
+      }
       proveedoresChannel.unbind();
     };
 

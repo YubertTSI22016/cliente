@@ -29,7 +29,7 @@
 
           <ion-item ng-click="goToPagos()" menu-close>
             <i class="icon ion-card"></i>
-            Pagos
+            Pago
           </ion-item>
 
           <ion-item ng-click="goToServicios()" menu-close>
@@ -40,6 +40,11 @@
           <ion-item ng-click="goToProveedor()" menu-close ng-if="usuario.proveedor">
             <i class="icon ion-android-calendar"></i>
             Brindar servicios
+          </ion-item>
+
+          <ion-item ng-click="goToGanancias()" menu-close ng-if="usuario.proveedor">
+            <i class="icon ion-cash"></i>
+            Ganancias
           </ion-item>
 
           <ion-item ng-click="serProveedor()" menu-close ng-if="!usuario.proveedor">
