@@ -10,11 +10,11 @@
 // });
 
 angular.module('app').constant('CONFIG', {
-  'NOMBRE_EMPRESA'  : 'asd',
-  'IONIC_ID'        : 'asd',
-  'URL'             : 'asd',
-  'TENANT_ID'       : 'asd',
-  'FACEBOOK'        : false,
-  'PUSHER_KEY'      : 'asd',
-  'STRIPE_KEY'      : 'asd'
+  'NOMBRE_EMPRESA'  : '%NOMBRE_EMPRESA%',
+  'IONIC_ID'        : '%IONIC_ID%',
+  'URL'             : '%URL%',
+  'TENANT_ID'       : '%TENANT_ID%',
+  'FACEBOOK'        : %FACEBOOK%,
+  'PUSHER_KEY'      : '%PUSHER_KEY%',
+  'STRIPE_KEY'      : '%STRIPE_KEY%'
 });

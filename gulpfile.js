@@ -8,6 +8,7 @@ var rename = require('gulp-rename');
 var sh = require('shelljs');
 var replace = require('gulp-replace');
 var prompt = require('gulp-prompt');
+var rename = require("gulp-rename");
 
 var paths = {
   sass: ['./scss/**/*.scss']
@@ -53,17 +54,87 @@ gulp.task('git-check', function(done) {
   done();
 });
 
-gulp.task('templates', function(){
-
-  gulp.src('./www/js/config.js')
+gulp.task('pre-build', function(){
+  gulp.src('config.tpl')
     .pipe(prompt.prompt([{
         type: 'input',
         name: 'NOMBRE_EMPRESA',
-        message: 'NOMBRE_EMPRESA?'
+        message: 'NOMBRE_EMPRESA?',
+        validate: function(value){
+          if(!value){
+              return "Ingrese un valor";
+          }
+          return true;
+        }
+    }, {
+        type: 'input',
+        name: 'IONIC_ID',
+        message: 'IONIC_ID?',
+        validate: function(value){
+          if(!value){
+              return "Ingrese un valor";
+          }
+          return true;
+        }
+    }, {
+        type: 'input',
+        name: 'URL',
+        message: 'URL?',
+        validate: function(value){
+          if(!value){
+              return "Ingrese un valor";
+          }
+          return true;
+        }
+    }, {
+        type: 'input',
+        name: 'TENANT_ID',
+        message: 'TENANT_ID?',
+        validate: function(value){
+          if(!value){
+              return "Ingrese un valor";
+          }
+          return true;
+        }
+    }, {
+        type: 'checkbox',
+        name: 'FACEBOOK',
+        message: 'FACEBOOK?',
+        choices: ['si', 'no']
+    }, {
+        type: 'input',
+        name: 'PUSHER_KEY',
+        message: 'PUSHER_KEY?',
+        validate: function(value){
+          if(!value){
+              return "Ingrese un valor";
+          }
+          return true;
+        }
+    }, {
+        type: 'input',
+        name: 'STRIPE_KEY',
+        message: 'STRIPE_KEY?',
+        validate: function(value){
+          if(!value){
+              return "Ingrese un valor";
+          }
+          return true;
+        }
     }], function(res){
-        gulp.src('./www/js/config.js')
-          .pipe(replace('NOMBRE_EMPRESA', res.NOMBRE_EMPRESA));
-    }));
+      res.FACEBOOK = res.FACEBOOK == 'si' ? true : false;
 
+      gulp.src('config.tpl', { base : './' })
+        .pipe(replace('%NOMBRE_EMPRESA%', res.NOMBRE_EMPRESA))
+        .pipe(replace('%IONIC_ID%', res.IONIC_ID))
+        .pipe(replace('%URL%', res.URL))
+        .pipe(replace('%TENANT_ID%', res.TENANT_ID))
+        .pipe(replace('%FACEBOOK%', res.FACEBOOK))
+        .pipe(replace('%PUSHER_KEY%', res.PUSHER_KEY))
+        .pipe(replace('%STRIPE_KEY%', res.STRIPE_KEY))
+        .pipe(rename('config.js'))
+        .pipe(gulp.dest('./www/js/'));
+        
+    }));
   
 });

@@ -1,7 +1,5 @@
 angular.module('app', ['ionic', 'ionic.cloud', 'ionic.rating', 'uiGmapgoogle-maps', 'pusher-angular'])
 
-
-
 .run(function($ionicPlatform, $rootScope, CONFIG) {
   $ionicPlatform.ready(function() {
     if (window.cordova && window.cordova.plugins && window.cordova.plugins.Keyboard) {
@@ -15,8 +13,6 @@ angular.module('app', ['ionic', 'ionic.cloud', 'ionic.rating', 'uiGmapgoogle-map
   $rootScope.CONFIG = CONFIG;
 
   Stripe.setPublishableKey(CONFIG.STRIPE_KEY);
-
-  
 })
 
 .config(function($stateProvider, $urlRouterProvider, $ionicCloudProvider, $ionicConfigProvider, uiGmapGoogleMapApiProvider, CONFIG, $httpProvider) {
