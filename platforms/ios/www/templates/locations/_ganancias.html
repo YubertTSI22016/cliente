@@ -16,9 +16,9 @@
           <ion-scroll>
             <ion-item class="item item-scroll" ng-repeat="ganancia in ganancias" >
               <div class="row text-center">
-                <div class="col">${{ganancia.total}}</div>
-                <div class="col">${{ganancia.comision}}</div>
-                <div class="col">${{ganancia.ganancia}}</div>
+                <div class="col">${{ganancia.total | number:2}}</div>
+                <div class="col">${{ganancia.comision | number:2}}</div>
+                <div class="col">${{ganancia.ganancia | number:2}}</div>
               </div>
             </ion-item>
           </ion-scroll>
@@ -31,15 +31,15 @@
       <ion-list>
           <ion-item class="item">
             <div class="row text-center">
-              <div class="col">${{total.total}}</div>
-              <div class="col">${{total.totalComision}}</div>
-              <div class="col">${{total.totalGanancia}}</div>
+              <div class="col">${{total.total | number:2}}</div>
+              <div class="col">${{total.totalComision | number:2}}</div>
+              <div class="col">${{total.totalGanancia | number:2}}</div>
             </div>
           </ion-item>
 
           <ion-item class="item text-center">
             <h5>Usted tiene para cobrar </h5>
-            <h1>${{total.totalGanancia}}</h1>
+            <h1>${{total.totalGanancia | number:2}}</h1>
             <button class="button button-energized button-block" ng-click="doCobrar()" ng-if="total.totalGanancia"> Cobrar </button>
           </ion-item>
 

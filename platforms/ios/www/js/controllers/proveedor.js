@@ -5,11 +5,24 @@ angular.module('app')
       $state.go('welcome');
     }
 
+    PusherService.unbindAll();
+
     var usuario     = $ionicUser.get('info');
     var proveedor   = usuario.proveedor;
     $scope.markers  = [];
 
-    PusherService.unbindAll();
+    $scope.mapProveedorConfig = {
+      zoom    : 16,
+      center  : {
+        latitude  : -34.9075945,
+        longitude : -56.1457051
+      },
+      options : {
+        mapTypeControl    : false,
+        streetViewControl : false,
+        styles            : [{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#6195a0"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"landscape","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"color":"#e6f3d6"},{"visibility":"on"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45},{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#f4d2c5"},{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"labels.text","stylers":[{"color":"#4e4e4e"}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#f4f4f4"}]},{"featureType":"road.arterial","elementType":"labels.text.fill","stylers":[{"color":"#787878"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#eaf6f8"},{"visibility":"on"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":"#eaf6f8"}]}]
+      }
+    };
 
     ProveedorService.getById(proveedor.id).then(function (proveedor) {
       usuario['proveedor'] = proveedor;
@@ -26,23 +39,9 @@ angular.module('app')
           }
         );
       }
-
     }, function(err) {
       alert(err.message);
     });
-
-    $scope.mapProveedorConfig = {
-      zoom    : 16,
-      center  : {
-        latitude  : -34.9075945,
-        longitude : -56.1457051
-      },
-      options : {
-        mapTypeControl    : false,
-        streetViewControl : false,
-        styles            : [{"featureType":"administrative","elementType":"labels.text.fill","stylers":[{"color":"#6195a0"}]},{"featureType":"landscape","elementType":"all","stylers":[{"color":"#f2f2f2"}]},{"featureType":"landscape","elementType":"geometry.fill","stylers":[{"color":"#ffffff"}]},{"featureType":"poi","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"poi.park","elementType":"geometry.fill","stylers":[{"color":"#e6f3d6"},{"visibility":"on"}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":-100},{"lightness":45},{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"all","stylers":[{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"geometry.fill","stylers":[{"color":"#f4d2c5"},{"visibility":"simplified"}]},{"featureType":"road.highway","elementType":"labels.text","stylers":[{"color":"#4e4e4e"}]},{"featureType":"road.arterial","elementType":"geometry.fill","stylers":[{"color":"#f4f4f4"}]},{"featureType":"road.arterial","elementType":"labels.text.fill","stylers":[{"color":"#787878"}]},{"featureType":"road.arterial","elementType":"labels.icon","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#eaf6f8"},{"visibility":"on"}]},{"featureType":"water","elementType":"geometry.fill","stylers":[{"color":"#eaf6f8"}]}]
-      }
-    };
 
     var setCurrentLocation = function(pos){
       $scope.map.setCenter(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
@@ -66,7 +65,7 @@ angular.module('app')
         $scope.markers.push({
           id          : 'proveedor',
           title       : 'yo mismo',
-          options     : { icon : image, draggable : true, animation : google.maps.Animation.DROP },
+          options     : { icon : image, animation : google.maps.Animation.DROP },
           coords      : {
             latitude  : pos.coords.latitude,
             longitude : pos.coords.longitude
@@ -84,9 +83,43 @@ angular.module('app')
     };
 
     var mostrarServicio = function(servicio){
+      var cords = servicio.coordenadasOrigen.split(',');
+
+      $scope.map.setCenter(new google.maps.LatLng(cords[0], cords[1]));
+      $scope.map.setZoom(12);
+
+      var image = {
+        url         : 'img/1478241457_location-24.png',
+        size        : new google.maps.Size(71, 71),
+        origin      : new google.maps.Point(0, 0),
+        anchor      : new google.maps.Point(17, 34),
+        scaledSize  : new google.maps.Size(35, 35)
+      };
+
+      var marker = _.find($scope.markers, ['id', 'servicio']);
+
+      if (marker) {
+        marker['coords'] = {
+          latitude  : cords[0],
+          longitude : cords[1]
+        };
+      } else {
+        $scope.markers.push({
+          id          : 'servicio',
+          title       : 'servicio',
+          options     : { icon : image, animation : google.maps.Animation.DROP },
+          coords      : {
+            latitude  : cords[0],
+            longitude : cords[1]
+          }
+        });
+      }
+
       var alertPopup = $ionicPopup.show({
         title     : 'Usuario solicitando un servicio',
-        template  : 'Si desea tomar el servicio acepte el pedido',
+        subTitle  : 'Si desea tomar el servicio acepte el pedido',
+        template  : servicio.descripcion,
+        cssClass  : 'proveedor-popup',
         buttons   : [{
           text  : 'Cancelar',
           type  : 'button-light'
@@ -94,14 +127,19 @@ angular.module('app')
           text  : '<b>Aceptar</b>',
           type  : 'button-energized',
           onTap : function(e) {
+            $ionicLoading.show();
+
             var servicioData = {
               idServicio  : servicio.id,
               idProveedor : proveedor.id 
             }
+
             ServicioService.ofrecer(servicioData).then(function (response) {
+              $ionicLoading.hide();
               $state.go('locations.serviciodetalle', { id : response.id });
             }, function(err) {
               alert(err.message);
+              $ionicLoading.hide();
             });
           }
         }]
@@ -151,8 +189,27 @@ angular.module('app')
       });
     }
 
-    uiGmapIsReady.promise(3).then(function(instances) {
-      var map = instances[2].map;
+    uiGmapIsReady.promise(1).then(function(instances) {
+      if($scope.map){
+        return
+      }
+
+      var map = instances[0].map;
+      $scope.map = map;
+
+      navigator.geolocation.getCurrentPosition(function (pos) {
+        setCurrentLocation(pos);
+      }, function (error) {
+        alert('getCurrentPosition Unable to get location: ' + error);
+      });
+    });
+
+    uiGmapIsReady.promise(2).then(function(instances) {
+      if($scope.map){
+        return
+      }
+
+      var map = instances[1].map;
       $scope.map = map;
 
       navigator.geolocation.getCurrentPosition(function (pos) {

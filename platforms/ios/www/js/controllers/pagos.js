@@ -10,16 +10,16 @@ angular.module('app')
     
     $scope.pago = {
       cvc     : '',
-      numero  : '',
       mm      : '',
-      yy      : ''
+      yy      : '',
+      numero  : ''
     };
 
     $scope.pagoProveedor = {
       cvc     : '',
-      numero  : '',
       mm      : '',
-      yy      : ''
+      yy      : '',
+      numero  : ''
     }
 
     $scope.doPago = function(){
@@ -29,6 +29,7 @@ angular.module('app')
       Stripe.card.createToken({
         cvc       : pago.cvc,
         number    : pago.numero,
+        currency  : 'usd',
         exp_month : pago.mm,
         exp_year  : pago.yy,
       }, function(status, response){
@@ -69,6 +70,7 @@ angular.module('app')
       Stripe.card.createToken({
         cvc       : pago.cvc,
         number    : pago.numero,
+        currency  : 'usd',
         exp_month : pago.mm,
         exp_year  : pago.yy,
       }, function(status, response){

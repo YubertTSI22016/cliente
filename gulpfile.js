@@ -55,7 +55,7 @@ gulp.task('git-check', function(done) {
 });
 
 gulp.task('pre-build', function(){
-  gulp.src('config.tpl')
+  gulp.src('tpl')
     .pipe(prompt.prompt([{
         type: 'input',
         name: 'NOMBRE_EMPRESA',
@@ -68,8 +68,8 @@ gulp.task('pre-build', function(){
         }
     }, {
         type: 'input',
-        name: 'IONIC_ID',
-        message: 'IONIC_ID?',
+        name: 'NOMBRE_APP',
+        message: 'NOMBRE_APP?',
         validate: function(value){
           if(!value){
               return "Ingrese un valor";
@@ -98,42 +98,30 @@ gulp.task('pre-build', function(){
         }
     }, {
         type: 'checkbox',
+        name: 'TIPO',
+        message: 'TIPO?',
+        choices: ['transporte', 'servicio']
+    }, {
+        type: 'checkbox',
         name: 'FACEBOOK',
         message: 'FACEBOOK?',
         choices: ['si', 'no']
-    }, {
-        type: 'input',
-        name: 'PUSHER_KEY',
-        message: 'PUSHER_KEY?',
-        validate: function(value){
-          if(!value){
-              return "Ingrese un valor";
-          }
-          return true;
-        }
-    }, {
-        type: 'input',
-        name: 'STRIPE_KEY',
-        message: 'STRIPE_KEY?',
-        validate: function(value){
-          if(!value){
-              return "Ingrese un valor";
-          }
-          return true;
-        }
     }], function(res){
       res.FACEBOOK = res.FACEBOOK == 'si' ? true : false;
 
-      gulp.src('config.tpl', { base : './' })
+      gulp.src('tpl/config.js.tpl', { base : './' })
         .pipe(replace('%NOMBRE_EMPRESA%', res.NOMBRE_EMPRESA))
-        .pipe(replace('%IONIC_ID%', res.IONIC_ID))
         .pipe(replace('%URL%', res.URL))
         .pipe(replace('%TENANT_ID%', res.TENANT_ID))
+        .pipe(replace('%TIPO%', res.TIPO))
         .pipe(replace('%FACEBOOK%', res.FACEBOOK))
-        .pipe(replace('%PUSHER_KEY%', res.PUSHER_KEY))
-        .pipe(replace('%STRIPE_KEY%', res.STRIPE_KEY))
         .pipe(rename('config.js'))
         .pipe(gulp.dest('./www/js/'));
+
+      gulp.src('tpl/ionic.config.json.tpl', { base : './' })
+        .pipe(replace('%NOMBRE_APP%', res.NOMBRE_APP))
+        .pipe(rename('ionic.config.json'))
+        .pipe(gulp.dest('./'));
         
     }));
   

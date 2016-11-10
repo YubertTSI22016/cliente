@@ -10,9 +10,11 @@
 
     <div class="header-slideshow-wrapper">
 
-      <hgroup class="header-overlay">
-        <h5>creado por {{servicio.usuario.nombre}} {{servicio.usuario.apellido}}</h5>
-      </hgroup>
+      <div class="header-slideshow-image" 
+        style="margin-top:65px; height: 155px; background-image:url(https://maps.googleapis.com/maps/api/staticmap?center={{servicio.coordenadasOrigen}}&zoom={{configMapa.zoom}}&size=375x154&maptype=roadmap{{configMapa.puntosPath}}&key=AIzaSyBxfPmvHbNozhPG_0934HjQV4mb7KoHkXE);">
+      </div>
+
+      <!-- &style=element:labels|visibility:off -->
 
     </div>
 
@@ -22,6 +24,10 @@
       <div class="item item-divider">
         Datos del usuario
       </div>
+      <a class="item item-icon-left">
+        <i class="icon ion-person"></i>
+        {{servicio.usuario.nombre}} {{servicio.usuario.apellido}}
+      </a>
       <a class="item item-icon-left" ng-href="mailto:{{servicio.usuario.email.email}}">
         <i class="icon ion-email"></i>
         {{servicio.usuario.email.email}}

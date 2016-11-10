@@ -24,14 +24,10 @@ angular.module('app', ['ionic', 'ionic.cloud', 'ionic.rating', 'uiGmapgoogle-map
     }
   });
 
-  console.log(ionic);
-
-
-
   uiGmapGoogleMapApiProvider.configure({
-      key: 'AIzaSyB16sGmIekuGIvYOfNoW9T44377IU2d2Es',
+      key: 'AIzaSyBxfPmvHbNozhPG_0934HjQV4mb7KoHkXE',
       v: '3.20', //defaults to latest 3.X anyhow
-      libraries: 'weather,geometry,visualization'
+      libraries: 'weather,geometry,visualization,places'
   });
 
   // if none of the above states are matched, use this as the fallback
@@ -278,4 +274,98 @@ angular.module('app', ['ionic', 'ionic.cloud', 'ionic.rating', 'uiGmapgoogle-map
       });
     };
 
+})
+
+.directive('ngAutocomplete', function(uiGmapGoogleMapApi) {
+    return {
+      require: 'ngModel',
+      scope: {
+        ngModel: '=',
+        options: '=?',
+        details: '=?'
+      },
+
+      link : function(scope, element, attrs, controller) {
+       
+        //options for autocomplete
+        var opts
+        var watchEnter = false
+        //convert options provided to opts
+        var initOpts = function() {
+
+          opts = {}
+          if (scope.options) {
+
+            if (scope.options.watchEnter !== true) {
+              watchEnter = false
+            } else {
+              watchEnter = true
+            }
+
+            if (scope.options.types) {
+              opts.types = []
+              opts.types.push(scope.options.types)
+              scope.gPlace.setTypes(opts.types)
+            } else {
+              scope.gPlace.setTypes([])
+            }
+
+            if (scope.options.bounds) {
+              opts.bounds = scope.options.bounds
+              scope.gPlace.setBounds(opts.bounds)
+            } else {
+              scope.gPlace.setBounds(null)
+            }
+
+            if (scope.options.country) {
+              opts.componentRestrictions = {
+                country: scope.options.country
+              }
+              scope.gPlace.setComponentRestrictions(opts.componentRestrictions)
+            } else {
+              scope.gPlace.setComponentRestrictions(null)
+            }
+          }
+        }
+
+        uiGmapGoogleMapApi.then(function(instances) {
+          if (scope.gPlace == undefined) {
+            scope.gPlace = new google.maps.places.Autocomplete(element[0], {});
+          }
+
+          scope.gPlace.addListener('place_changed', function() {
+            var result = scope.gPlace.getPlace();
+
+            if (!result.geometry) {
+              alert("Seleccione uno de la lista");
+              return;
+            }
+
+            if (result !== undefined) {
+              if (result.address_components !== undefined) {
+                scope.$apply(function() {
+                  scope.details = result;
+                  // controller.$setViewValue(element.val());
+                  controller.$setViewValue(result);
+                });
+              }
+            }
+          })
+        });
+
+        controller.$render = function () {
+          var location = controller.$viewValue;
+          element.val(location);
+        };
+
+        //watch options provided to directive
+        scope.watchOptions = function () {
+          return scope.options
+        };
+        scope.$watch(scope.watchOptions, function () {
+          initOpts()
+        }, true);
+        
+    }
+  }
 });

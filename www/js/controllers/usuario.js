@@ -1,17 +1,17 @@
 angular.module('app')
 
-  .controller('UsuarioCtrl', function ($scope, $ionicAuth, $ionicUser, $ionicLoading, $state, $ionicSideMenuDelegate, $ionicPopup, uiGmapGoogleMapApi, uiGmapIsReady, PusherService, ServicioService, ProveedorService) {
+  .controller('UsuarioCtrl', function ($scope, CONFIG, $ionicAuth, $ionicUser, $ionicLoading, $state, $ionicSideMenuDelegate, $ionicPopup, uiGmapGoogleMapApi, uiGmapIsReady, PusherService, ServicioService, ProveedorService) {
     if (!$ionicAuth.isAuthenticated()) {
       $state.go('welcome');
     }
+
+    PusherService.unbindAll();
 
     var usuario     = $ionicUser.get('info');
     $scope.markers  = [];
     $scope.data     = {
       comentario : ''
     };
-
-    PusherService.unbindAll();
 
     $scope.mapUsuarioConfig = {
       zoom        : 16,
@@ -66,28 +66,28 @@ angular.module('app')
     };
 
     $scope.cargarProveedores = function(){
-      ProveedorService.getActivos().then(function(collection) {
-        $scope.proveedores = collection;
-        var image = {
-          url         : 'img/1476577917_Shop.png',
-          size        : new google.maps.Size(71, 71),
-          origin      : new google.maps.Point(0, 0),
-          anchor      : new google.maps.Point(17, 34),
-          scaledSize  : new google.maps.Size(35, 35)
-        };
+      // ProveedorService.getActivos().then(function(collection) {
+      //   $scope.proveedores = collection;
+      //   var image = {
+      //     url         : 'img/1476577917_Shop.png',
+      //     size        : new google.maps.Size(71, 71),
+      //     origin      : new google.maps.Point(0, 0),
+      //     anchor      : new google.maps.Point(17, 34),
+      //     scaledSize  : new google.maps.Size(35, 35)
+      //   };
 
-        angular.forEach(collection, function(proveedor) {
-          $scope.markers.push({
-            id          : proveedor.id,
-            title       : proveedor.titulo,
-            options     : { icon: image, animation: google.maps.Animation.DROP },
-            coords      : {
-              latitude  : proveedor.latitude,
-              longitude : proveedor.longitude
-            }
-          });
-        });
-      });
+      //   angular.forEach(collection, function(proveedor) {
+      //     $scope.markers.push({
+      //       id          : proveedor.id,
+      //       title       : proveedor.titulo,
+      //       options     : { icon: image, animation: google.maps.Animation.DROP },
+      //       coords      : {
+      //         latitude  : proveedor.latitude,
+      //         longitude : proveedor.longitude
+      //       }
+      //     });
+      //   });
+      // });
     }
 
     $scope.centerOnMe = function () {
@@ -105,15 +105,21 @@ angular.module('app')
       });
     };
 
-    var pedir = function (descripcion, marker) {
+    var pedir = function (descripcion, ubicacion, destino) {
+      $ionicLoading.show();
       var data = { 
         idUsuario   : usuario.id, 
-        ubicacion   : marker['coords']['latitude'] + ',' +  marker['coords']['longitude'],
+        ubicacion   : ubicacion['coords']['latitude'] + ',' +  ubicacion['coords']['longitude'],
         destino     : '',
         descripcion : descripcion
       };
 
+      if(destino){
+        data['destino'] = destino['coords']['latitude'] + ',' +  destino['coords']['longitude'];
+      }
+
       ServicioService.pedir(data).then(function (response) {
+        $ionicLoading.hide();
         var alertPopup = $ionicPopup.alert({
           title     : 'Solicitud enviada',
           template  : 'Aguarde un momento, esperamos la respuesta de algun proveedor libre.',
@@ -137,12 +143,15 @@ angular.module('app')
               $ionicLoading.hide();
             });  
           }
-        });
+        }, function(err) {
+          alert(err.message);
+          $ionicLoading.hide();
+        }); 
 
         PusherService.usuarioChannel.bind('solicitud-aceptada', 
           function(data) {
-            var servicio = data.message;
             alertPopup.close();
+            var servicio = data.message;
             $state.go('locations.calificar', { id : servicio.id });
           }
         );
@@ -152,8 +161,26 @@ angular.module('app')
     };
 
     $scope.solicitar = function(){
-      var marker = _.find($scope.markers, ['id', 'usuario']);
-      if (!marker) {
+      if(!usuario.tokenTarjeta){
+        $ionicPopup.alert({
+          title: 'Debe ingresar una tarjeta',
+          template: 'Dirijase a la seccion de pago en el menu e ingrese una tarjeta.'
+        });
+        return;
+      }
+
+      var ubicacion = _.find($scope.markers, ['id', 'usuario']);
+      var destino   = _.find($scope.markers, ['id', 'destino']);
+
+      if (!ubicacion) {
+        return;
+      }
+
+      if(CONFIG.TIPO === 'transporte' && !destino){
+        $ionicPopup.alert({
+          title: 'Debe ingresar un destino',
+          template: 'Utilize el buscador para ingresar el destino del servicio.'
+        });
         return;
       }
 
@@ -169,13 +196,89 @@ angular.module('app')
           text  : '<b>Aceptar</b>',
           type  : 'button-energized',
           onTap : function(e) {
-            pedir($scope.data.comentario, marker);
+            pedir($scope.data.comentario, ubicacion, destino);
           }
         }]
       });
     };
 
+    $scope.changeDestino = function(){
+      var destino = this.destino;
+      if(!destino.geometry){
+        return;
+      }
+      var lat = destino.geometry.location.lat();
+      var lng = destino.geometry.location.lng();
+      $scope.map.setCenter(new google.maps.LatLng(lat, lng));
+
+      var image = {
+        url         : 'img/1478241457_location-24.png',
+        size        : new google.maps.Size(71, 71),
+        origin      : new google.maps.Point(0, 0),
+        anchor      : new google.maps.Point(17, 34),
+        scaledSize  : new google.maps.Size(35, 35)
+      };
+
+      var marker = _.find($scope.markers, ['id', 'destino']);
+
+      if (marker) {
+        marker['coords'] = {
+          latitude  : lat,
+          longitude : lng
+        };
+      } else {
+        $scope.markers.push({
+          id          : 'destino',
+          title       : 'el otro',
+          options     : { icon : image, draggable: true, animation: google.maps.Animation.DROP },
+          coords      : {
+            latitude  : lat,
+            longitude : lng
+          },
+          events      : {
+            dragend : function (marker, eventName, args) {
+              var lat = marker.getPosition().lat();
+              var lon = marker.getPosition().lng();
+
+              $scope.map.setCenter(new google.maps.LatLng(lat, lon));
+            }
+          }
+        });
+      }
+    };
+
+    $scope.disableTap = function(){
+      container = document.getElementsByClassName('pac-container');
+      // disable ionic data tab
+      angular.element(container).attr('data-tap-disabled', 'true');
+      // leave input field if google-address-entry is selected
+      angular.element(container).on('click', function(){
+          document.getElementById('searchBox').blur();
+      });
+    };
+
+    uiGmapIsReady.promise(1).then(function(instances) {
+      if($scope.map){
+        return
+      }
+
+      var map = instances[0].map;
+      $scope.map = map;
+
+      navigator.geolocation.getCurrentPosition(function (pos) {
+        setCurrentLocation(pos);
+      }, function (error) {
+        alert('getCurrentPosition Unable to get location: ' + error);
+      });
+
+      $scope.cargarProveedores();
+    });
+
     uiGmapIsReady.promise(2).then(function(instances) {
+      if($scope.map){
+        return
+      }
+
       var map = instances[1].map;
       $scope.map = map;
 

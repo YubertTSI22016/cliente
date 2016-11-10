@@ -1,5 +1,5 @@
 {
-  "name": "yuber",
+  "name": "%NOMBRE_APP%",
   "app_id": "324566f8",
   "gulpStartupTasks": [
     "sass",
@@ -13,7 +13,7 @@
   "proxies": [
     {
       "path": "/yuberapi/rest/",
-      "proxyUrl": "http://10.0.22.195:8080/yuberapi/rest/"
+      "proxyUrl": "http://192.168.43.49:8080/yuberapi/rest/"
     }
   ]
 }

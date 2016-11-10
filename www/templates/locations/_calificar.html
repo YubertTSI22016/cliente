@@ -3,11 +3,11 @@
   <ion-content class="has-header" style="top:0;">
 
     <div class="header-slideshow-wrapper">
+      <div class="header-slideshow-image" 
+        style="margin-top:65px; height: 155px; background-image:url(https://maps.googleapis.com/maps/api/staticmap?center={{servicio.coordenadasOrigen}}&zoom={{configMapa.zoom}}&size=375x154&maptype=roadmap{{configMapa.puntosPath}}&key=AIzaSyBxfPmvHbNozhPG_0934HjQV4mb7KoHkXE);">
+      </div>
 
-      <hgroup class="header-overlay">
-        <h5>atendido por {{servicio.proveedor.nombre}}</h5>
-      </hgroup>
-
+      <!-- &style=element:labels|visibility:off -->
     </div>
     
     <div class="list padding">
@@ -16,6 +16,10 @@
       <div class="item item-divider">
           Datos del proveedor
       </div>
+      <a class="item item-icon-left">
+        <i class="icon ion-person"></i>
+        {{servicio.proveedor.nombre}}
+      </a>
       <a class="item item-icon-left" ng-href="mailto:{{servicio.proveedor.usuario.email.email}}">
         <i class="icon ion-email"></i>
         {{servicio.proveedor.usuario.email.email}}
@@ -33,8 +37,8 @@
         </div>
 
         <label class="item item-input">
-          <textarea placeholder="Agregar un comentario" ng-model="reviewData.comentario" ng-if="!servicio.comentario" style="height: 69px"></textarea>
-          <p ng-if="servicio.comentario">{{servicio.comentario}}</p>
+          <textarea placeholder="Agregar un comentario" ng-model="reviewData.comentario" ng-if="!servicio.rating" style="height: 69px"></textarea>
+          <p ng-if="servicio.rating">{{servicio.comentario}}&nbsp;</p>
         </label>
 
         <div class="item item-divider">

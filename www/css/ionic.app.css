@@ -7836,5 +7836,11 @@ ion-content .button {
     color: #818284;
     background: #F7F7F7; }
 
-// .scroll {
-//   height: 100%; }
+    .proveedor-popup {
+      top: initial;
+      bottom: 70px;
+    }
+
+    .proveedor-popup .popup {
+          width: 320px;
+    }

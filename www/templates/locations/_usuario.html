@@ -5,12 +5,14 @@
   </ion-nav-buttons>
 
   <ion-content class="has-header" scroll="false">
+    <div class="item item-input-inset item-dark" style="z-index: 999;" ng-if="CONFIG.TIPO === 'transporte'">
+      <label class="item-input-wrapper">
+        <input type="text" id="searchBox" class="form-control" ng-autocomplete ng-model="destino" ng-focus="disableTap()" ng-change="changeDestino()"/>
+      </label>
+    </div>
 
     <ui-gmap-google-map center="mapUsuarioConfig.center" zoom="mapUsuarioConfig.zoom" options="mapUsuarioConfig.options">
       <ui-gmap-marker ng-repeat="m in markers" icon="m.icon" coords="m.coords" options="m.options" events="m.events" idKey="m.id"></ui-gmap-marker>
-    </ui-gmap-google-map>
-
-    <ui-gmap-google-map center="mapUsuarioConfig.center" zoom="mapUsuarioConfig.zoom" options="mapUsuarioConfig.options" style="display:none">
     </ui-gmap-google-map>
 
     <div class="map-scroller">

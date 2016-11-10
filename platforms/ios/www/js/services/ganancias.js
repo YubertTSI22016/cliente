@@ -17,7 +17,22 @@ angular.module('app')
           return defer.promise;
       };
 
+      var cobrar = function(usuario){
+          var defer = $q.defer();
+
+          $http.get(CONFIG.URL + 'vertical/pagoaproveedor/' + usuario)
+          .success(function (enc) {
+              defer.resolve(enc);
+          })
+          .error(function(){
+              defer.reject('server error')
+          });
+
+          return defer.promise;
+      };
+
       return {
+          cobrar    : cobrar,
           ganancias : ganancias,
       }
   }

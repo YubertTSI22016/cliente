@@ -1,33 +1,11 @@
 angular.module('app')
 
-  .controller('GananciasCtrl', function ($scope, $state, $ionicAuth, $ionicUser, CONFIG, GananciasService) {
+  .controller('GananciasCtrl', function ($scope, $state, $ionicAuth, $ionicUser, $ionicLoading, $ionicPopup, CONFIG, GananciasService) {
     if (!$ionicAuth.isAuthenticated()) {
       $state.go('welcome');
     }
 
     var usuario = $ionicUser.get('info');
-
-    // $scope.ganancias = [{
-    //   total     : 100,
-    //   comision  : 20,
-    //   ganancia  : 80
-    // }, {
-    //   total     : 110,
-    //   comision  : 21,
-    //   ganancia  : 89
-    // }, {
-    //   total     : 100,
-    //   comision  : 20,
-    //   ganancia  : 80
-    // }, {
-    //   total     : 110,
-    //   comision  : 21,
-    //   ganancia  : 89
-    // }, {
-    //   total     : 100,
-    //   comision  : 20,
-    //   ganancia  : 80
-    // }];
     
     $scope.total = {
       total         : 0,
@@ -40,12 +18,48 @@ angular.module('app')
     }
 
     GananciasService.ganancias(gananciaData).then(function(data){
-      $scope.ganancias = data;
+      var gananciaData = [];
+      for(var i in data){
+        var ganancia = data[i];
+
+        var total     = ganancia.servicio.precio;
+        var comision  = ganancia.servicio.precio * (ganancia.porcentageRetencion / 100);
+        var ganancia  = total - comision;
+
+        gananciaData.push({
+          total     : total,
+          comision  : comision,
+          ganancia  : ganancia
+        });
+
+        $scope.total.total += total;
+        $scope.total.totalComision += comision;
+        $scope.total.totalGanancia += ganancia;
+      }
+      $scope.ganancias = gananciaData;
     });
 
     $scope.doCobrar = function(){
-      alert('hacer el cobrar')
-      
+      if(!usuario.proveedor.tokenTarjeta){
+        $ionicPopup.alert({
+          title: 'Debe ingresar una tarjeta',
+          template: 'Dirijase a la seccion de pago en el menu e ingrese una tarjeta.'
+        });
+        return;
+      }
+
+      $ionicLoading.show();
+      GananciasService.cobrar(usuario.proveedor.id).then(function(data){
+        $scope.ganancias            = [];
+        $scope.total.total          = 0;
+        $scope.total.totalComision  = 0;
+        $scope.total.totalGanancia  = 0;
+
+        $ionicLoading.hide();
+      }, function(err) {
+        alert(err.message);
+        $ionicLoading.hide();
+      });
     }
 
   });
