@@ -1,8 +1,18 @@
 angular.module('app')
 
-  .controller('PerfilCtrl', function ($scope, $state, $ionicAuth, $ionicUser, $ionicModal, UsuarioService, ProveedorService) {
+  .controller('PerfilCtrl', function ($scope, $state, $ionicAuth, $ionicUser, $ionicModal, $http, CONFIG, UsuarioService, ProveedorService) {
     if (!$ionicAuth.isAuthenticated()) {
       $state.go('welcome');
+    }
+
+    if(!CONFIG.configuracion){
+      $http.get(CONFIG.URL + 'vertical/obtenerconfig/')
+      .success(function (configuracion) {
+        $('head').append('<style>' + configuracion.css + '</style>');
+
+        CONFIG['configuracion']   = configuracion;
+        CONFIG['NOMBRE_EMPRESA']  = configuracion.nombre;
+      });
     }
     
     $scope.usuario = $ionicUser.get('info');

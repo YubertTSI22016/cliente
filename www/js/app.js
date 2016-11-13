@@ -126,7 +126,7 @@ angular.module('app', ['ionic', 'ionic.cloud', 'ionic.rating', 'uiGmapgoogle-map
     });
 })
 
-.controller('WelcomeCtrl', function ($scope, CONFIG, $ionicModal, $state, $ionicPopup, $window, $ionicAuth, $ionicUser, $ionicLoading, UsuarioService, PusherService) {
+.controller('WelcomeCtrl', function ($scope, CONFIG, $http, $ionicModal, $state, $ionicPopup, $window, $ionicAuth, $ionicUser, $ionicLoading, UsuarioService, PusherService) {
     PusherService.unbindAll();
     
     $scope.loginData    = {
@@ -138,6 +138,14 @@ angular.module('app', ['ionic', 'ionic.cloud', 'ionic.rating', 'uiGmapgoogle-map
     if ($ionicAuth.isAuthenticated()) {
       $state.go('locations.usuario');
     }
+
+    $http.get(CONFIG.URL + 'vertical/obtenerconfig/')
+    .success(function (configuracion) {
+      $('head').append('<style>' + configuracion.css + '</style>');
+
+      CONFIG['configuracion']   = configuracion;
+      CONFIG['NOMBRE_EMPRESA']  = configuracion.nombre;
+    });
 
     $scope.backToWelcomePage = function(){
       $scope.modal.hide();
@@ -276,13 +284,13 @@ angular.module('app', ['ionic', 'ionic.cloud', 'ionic.rating', 'uiGmapgoogle-map
 
 })
 
-.directive('ngAutocomplete', function(uiGmapGoogleMapApi) {
+.directive('ngAutocomplete', function() {
     return {
-      require: 'ngModel',
-      scope: {
-        ngModel: '=',
-        options: '=?',
-        details: '=?'
+      require : 'ngModel',
+      scope   : {
+        ngModel : '=',
+        options : '=?',
+        details : '=?'
       },
 
       link : function(scope, element, attrs, controller) {
@@ -328,30 +336,28 @@ angular.module('app', ['ionic', 'ionic.cloud', 'ionic.rating', 'uiGmapgoogle-map
           }
         }
 
-        uiGmapGoogleMapApi.then(function(instances) {
-          if (scope.gPlace == undefined) {
-            scope.gPlace = new google.maps.places.Autocomplete(element[0], {});
+        if (scope.gPlace == undefined) {
+          scope.gPlace = new google.maps.places.Autocomplete(element[0], {});
+        }
+
+        scope.gPlace.addListener('place_changed', function() {
+          var result = scope.gPlace.getPlace();
+
+          if (!result.geometry) {
+            alert("Seleccione uno de la lista");
+            return;
           }
 
-          scope.gPlace.addListener('place_changed', function() {
-            var result = scope.gPlace.getPlace();
-
-            if (!result.geometry) {
-              alert("Seleccione uno de la lista");
-              return;
+          if (result !== undefined) {
+            if (result.address_components !== undefined) {
+              scope.$apply(function() {
+                scope.details = result;
+                // controller.$setViewValue(element.val());
+                controller.$setViewValue(result);
+              });
             }
-
-            if (result !== undefined) {
-              if (result.address_components !== undefined) {
-                scope.$apply(function() {
-                  scope.details = result;
-                  // controller.$setViewValue(element.val());
-                  controller.$setViewValue(result);
-                });
-              }
-            }
-          })
-        });
+          }
+        })
 
         controller.$render = function () {
           var location = controller.$viewValue;
@@ -365,7 +371,7 @@ angular.module('app', ['ionic', 'ionic.cloud', 'ionic.rating', 'uiGmapgoogle-map
         scope.$watch(scope.watchOptions, function () {
           initOpts()
         }, true);
-        
+      }
     }
   }
-});
+);

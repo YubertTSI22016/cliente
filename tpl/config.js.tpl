@@ -10,6 +10,19 @@
 //   'STRIPE_KEY'      : 'pk_test_6pRNASCoBOKtIshFeQd4XMUh'
 // });
 
+$.ajax({
+    url       : '%URL%vertical/obtenerconfig/',
+    method    : 'GET',
+    dataType  : 'json',
+    headers   : {
+      'yuber-tenant' : '%TENANT_ID%',
+    }
+}).done(function(configuracion) {
+  $('head').append('<style>' + configuracion.css + '</style>');
+  
+  angular.bootstrap(document, ['app']);
+});
+
 angular.module('app').constant('CONFIG', {
   'NOMBRE_EMPRESA'  : '%NOMBRE_EMPRESA%',
   'IONIC_ID'        : '324566f8',

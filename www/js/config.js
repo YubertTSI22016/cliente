@@ -2,7 +2,7 @@ angular.module('app').constant('CONFIG', {
   'NOMBRE_EMPRESA'  : 'YUBER',
   'IONIC_ID'        : '324566f8',
   'URL'             : '/yuberapi/rest/',
-  // 'URL'             : 'http://10.0.22.195:8080/yuberapi/rest/',
+  // 'URL'             : 'http://192.168.43.49:8080/yuberapi/rest/',
   'TENANT_ID'       : 'b378b367-b024-4168-86dc-fdf0c21ee200',
   'TIPO'       		: 'transporte',
   'FACEBOOK'        : true,
