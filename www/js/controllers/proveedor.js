@@ -147,7 +147,9 @@ angular.module('app')
 
       PusherService.proveedoresChannel.bind('solicitud-cancelada', 
         function(data) {
-          alertPopup.close();
+          if(data.message.id == servicio.id){
+            alertPopup.close();
+          }
         }
       );
     }

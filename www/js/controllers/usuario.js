@@ -106,6 +106,8 @@ angular.module('app')
     };
 
     var pedir = function (descripcion, ubicacion, destino) {
+      PusherService.unbindAll();
+      
       $ionicLoading.show();
       var data = { 
         idUsuario   : usuario.id, 
@@ -127,6 +129,24 @@ angular.module('app')
           okType    : 'button-assertive'
         });
 
+        PusherService.usuarioChannel.bind('solicitud-aceptada', 
+          function(data) {
+            alertPopup.close();
+            var servicio = data.message;
+            $state.go('locations.calificar', { id : servicio.id });
+          }
+        );
+
+        PusherService.usuarioChannel.bind('solicitud-cancelada', 
+          function(data) {
+            $ionicPopup.alert({
+              title: 'Su solicitud fue cancelada',
+              template: 'Al no tener respuesta de ningun proveedor se cancelo su solicitud, vuelva a intentarlo mas tarde.'
+            });
+            alertPopup.close();
+          }
+        );
+
         alertPopup.then(function(res) {
           $ionicLoading.show();
 
@@ -142,19 +162,13 @@ angular.module('app')
               alert(err.message);
               $ionicLoading.hide();
             });  
+          }else{
+            $ionicLoading.hide();
           }
         }, function(err) {
           alert(err.message);
           $ionicLoading.hide();
-        }); 
-
-        PusherService.usuarioChannel.bind('solicitud-aceptada', 
-          function(data) {
-            alertPopup.close();
-            var servicio = data.message;
-            $state.go('locations.calificar', { id : servicio.id });
-          }
-        );
+        });
       }, function(err) {
         alert(err.message);
       });

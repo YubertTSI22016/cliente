@@ -76,20 +76,22 @@ angular.module('app')
           okType    : 'button-assertive'
         });
 
-        var enviarPosicion = function() {
-          navigator.geolocation.getCurrentPosition(function (pos) {
-            var puntoData = {
-              idServicio  : response.id,
-              punto       : pos.coords.latitude + ',' + pos.coords.longitude
-            }
-            ServicioService.enviarPosicion(puntoData);
+        if (CONFIG.TIPO === 'transporte') {
+          var enviarPosicion = function() {
+            navigator.geolocation.getCurrentPosition(function (pos) {
+              var puntoData = {
+                idServicio  : response.id,
+                punto       : pos.coords.latitude + ',' + pos.coords.longitude
+              }
+              ServicioService.enviarPosicion(puntoData);
 
-            if($scope.enviar){
-              $timeout(enviarPosicion, 5000);
-            }
-          });
-        };
-        $timeout(enviarPosicion, 5000);
+              if($scope.enviar){
+                $timeout(enviarPosicion, 5000);
+              }
+            });
+          };
+          $timeout(enviarPosicion, 5000);
+        }
 
         alertPopup.then(function(res) {
           $scope.enviar = false;
