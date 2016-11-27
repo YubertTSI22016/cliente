@@ -93,8 +93,11 @@ angular.module('app')
 
       delete usuarioData['imagen'];
       delete usuarioData['clave'];
-      delete usuarioData['proveedor']['jornadaActual'];
-      delete usuarioData['proveedor']['jornadas'];
+      
+      if(usuarioData['proveedor']){
+        delete usuarioData['proveedor']['jornadaActual'];
+        delete usuarioData['proveedor']['jornadas'];
+      }
 
       UsuarioService.edit(usuarioData).then(function (usuario) {
         $ionicUser.set('info', usuario);

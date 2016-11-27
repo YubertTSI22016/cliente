@@ -122,7 +122,13 @@ angular.module('app')
         cssClass  : 'proveedor-popup',
         buttons   : [{
           text  : 'Cancelar',
-          type  : 'button-light'
+          type  : 'button-light',
+          onTap : function(e) {
+            var marker = _.find($scope.markers, ['id', 'servicio']);
+            var index = $scope.markers.indexOf(marker);
+
+            $scope.markers.splice(index, 1);
+          }
         }, {
           text  : '<b>Aceptar</b>',
           type  : 'button-energized',
@@ -148,6 +154,10 @@ angular.module('app')
       PusherService.proveedoresChannel.bind('solicitud-cancelada', 
         function(data) {
           if(data.message.id == servicio.id){
+            var marker = _.find($scope.markers, ['id', 'servicio']);
+            var index = $scope.markers.indexOf(marker);
+
+            $scope.markers.splice(index, 1);
             alertPopup.close();
           }
         }

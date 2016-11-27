@@ -131,9 +131,11 @@ angular.module('app')
 
         PusherService.usuarioChannel.bind('solicitud-aceptada', 
           function(data) {
-            alertPopup.close();
-            var servicio = data.message;
-            $state.go('locations.calificar', { id : servicio.id });
+            setTimeout(function(){ 
+                alertPopup.close();
+                var servicio = data.message;
+                $state.go('locations.calificar', { id : servicio.id });
+            }, 1000);
           }
         );
 
